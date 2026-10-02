@@ -38,7 +38,7 @@ docs/
   07-compliance.md           (pending) MDR/FDA wellness line, GDPR, store rules, checklist
   08-roadmap.md              (pending) phases and milestones
   09-open-questions.md       questions for the founder and for research; decisions log
-  10-ideas.md                founder's vision and ideas backlog (companion, free app with cosmetic revenue, jobs)
+  10-ideas.md                founder's vision and ideas backlog (companion, cosmetic revenue, jobs, horizontal progression); MVP first
   research/                  fact-checked research reports with sources
   source/                    raw founder material and dated founder notes
 packages/

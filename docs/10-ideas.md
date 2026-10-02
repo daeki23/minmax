@@ -2,6 +2,8 @@
 
 _Status: living document · started 2026-10-02. This file holds ideas the founder has stated as part of the vision but that are not yet designed, researched or scheduled. Each entry records the idea as stated, what it implies for the existing documents, and the questions it opens. Nothing here is rejected; nothing here is in the MVP scope until `01-product-concept.md` and `08-roadmap.md` say so. The founder's words are preserved verbatim in `source/founder-notes.md`._
 
+_Standing priority (founder, 2026-10-02): everything in this file is ideation. Shipping an MVP comes first, and no idea here may delay it. `01-product-concept.md` carries the lean cut of the MVP; `08-roadmap.md` schedules the ideas after it._
+
 ## 1. The companion
 
 **As stated (2026-10-02).** A cute companion that lives on the smartwatch and on the phone. It greets the user when they first open the app, explains that all data stays local, that the app costs nothing and that revenue is purely cosmetic, and from then on tells the user their next quests.
@@ -47,6 +49,23 @@ _Status: living document · started 2026-10-02. This file holds ideas the founde
 - **Evidence tiers.** Quests carry evidence tiers because health recommendations need them. A guitar quest does not, and the tier vocabulary should not be forced onto it.
 
 **Open questions for the founder.** Which job first. Are jobs self-reported only, or should MINMAX integrate with apps that can verify (a language app's API, a music app's practice log). Do jobs have their own levels, or feed Journey XP.
+
+## 4. Horizontal progression: there is always something to do
+
+**As stated (2026-10-02).** The horizontal progression model, applied to the app: people always find something to do. For some it is their character, for others something else.
+
+**What it means.** In game design, vertical progression is the power ladder (level, stats); horizontal progression is breadth: more places, options, collections and ways to play that do not require the number to go up. MINMAX's vertical axis is deliberately honest and slow (Character Level follows the body and can fall). Horizontal progression is everything a user can do while the body does not move: fill the unmeasured stats on the sheet, explore regions and chapters, earn claims, collect or earn cosmetics (§2), learn a job (§3), get to know the companion (§1). It answers the third job to be done in `01-product-concept.md`: make the work feel like progress even in weeks when the body does not move. And it says that different users progress on different surfaces: the character sheet for one, the world map for another, the quest list, the collection or the public profile for a third.
+
+**What the engine already does horizontally.** Journey XP is effort-based and separate from Level. Regions open through data presence, the home region and the Rift, not through Level (only the Arena and the Summit have gates). Test and import quests exist to reveal unmeasured stats. New Journey resets the horizontal layer without touching the honest numbers. Nothing in `@minmax/core` needs to change for this idea; it is a content and interface question.
+
+**Implications and tensions.**
+
+- **Breadth is content cost.** Every horizontal track is content a solo founder has to write, test and maintain. The MVP can carry the three tracks that already exist (fill the sheet, explore the four regions, earn claims); cosmetics, jobs and the companion are tracks for later phases in `08-roadmap.md`.
+- **"Always something to do" must stay pull, not push.** `01-product-concept.md` says daily use is optional and never required for progress. The horizontal layer may offer things to do; it must not punish for not doing them (no streaks that break, no decaying collections). The user-psychology report's findings on autonomy and pressure apply (`research/user-psychology.md`).
+- **One home screen cannot show every track.** If people progress on different surfaces, the interface must let each user put their surface first (sheet, map, quests, collection, profile) instead of showing all of them. This is an onboarding question next to the Game or Simple Mode choice.
+- **The honest numbers stay vertical.** Horizontal tracks may unlock cosmetics, titles, regions and chapters. They never change a stat, a percentile, a trust level or a claim.
+
+**Open questions for the founder.** Which tracks exist at launch beyond the three that exist today. Whether the user picks a primary surface during onboarding or the app infers it from use. Whether a collection (cosmetics, titles, claim cards) is a visible track on day one or arrives with the first cosmetics.
 
 ## How this file is used
 

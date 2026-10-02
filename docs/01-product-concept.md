@@ -71,6 +71,22 @@ Out (explicitly, for the first release):
 - Coaching content as a paid program (the founder's own training program may become a chapter later).
 - Web app beyond the verification page and the landing page.
 
+### Lean cut: the smallest version that can ship
+
+The founder's standing priority is to get an MVP to market (`source/founder-notes.md`, 2026-10-02). Read against that, the scope above is still large for one person. The lean cut below removes everything that is not needed to test the core promise (honest stats, a real character, quests that adapt) and names where each item goes. Each line is a proposal **[hypothesis]** until the founder confirms it and `08-roadmap.md` adopts it.
+
+| Item in the scope above | Lean cut | Returns in |
+|---|---|---|
+| Subscription with a free tier | No payments in the first release at all. The app is free; the first cosmetics arrive with the first update once there is something to dress (`10-ideas.md` §2). Removes store-billing, consumer-law and refund work from the launch checklist | First update after launch |
+| One vendor API via server | Dropped. HealthKit and Health Connect only; Garmin's program is closed and Oura, Polar and Fitbit are reachable through the platform stores | Growth phase, with the aggregator decision |
+| Four regions with one chapter each | Two regions with one chapter each: the home region of the chosen class and the Rift region of the bottleneck. The other regions are visible and explorable but have intro quests only | Second release |
+| Game Mode and Simple Mode | Both stay: the engine already produces both vocabularies and the primary audience splits on this choice. Only the Simple Mode onboarding copy is cut to the minimum | n/a |
+| Phase 0 claims with a public verification page | Kept in the lean cut because it needs the signer and the attestation path, which are the server's only reason to exist at launch; if the server slips, ship a shareable character card first and claims in the first update | Launch or first update |
+| In-app tests for Strength, Power and Mobility | Grip, push-ups, sit-to-stand, sit-and-reach and knee-to-wall only; vertical and broad jump and pull-ups come with the Arena | Second release |
+| Companion, watch, jobs, cosmetics collection, horizontal tracks beyond fill-the-sheet, explore, earn claims | Not in the first release | `08-roadmap.md` phases 4 and later |
+
+The lean cut keeps the differentiators (honest percentiles with provenance, the character, evidence-tiered quests, claims) and cuts breadth and revenue. Revenue is cut on purpose: a free first release with no store is the fastest route through review and the cleanest test of whether the core loop retains people. **[decision pending founder]**
+
 ## Risks the concept must survive
 
 | Risk | Why it is real | Mitigation |

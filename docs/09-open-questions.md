@@ -10,6 +10,7 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 
 ## Product
 
+- **[founder] Confirm the lean cut of the MVP** (`01-product-concept.md`, "Lean cut"). Three lines need a yes or no: a free first release with no payments at all; two regions with chapters instead of four; claims at launch or a shareable card first and claims in the first update. The roadmap is written from the answers.
 - **[founder] Is the training program part of the product?** Three readings are possible: (a) MINMAX is the game layer and plans come from quests only; (b) MINMAX ships the founder's own program as premium chapters; (c) MINMAX is a platform where coaches publish chapters. The MVP assumes (a).
 - **[founder] Platforms.** iOS first, Android first, or both at once? The assumption is both via a cross-platform stack, iOS store first because of HealthKit depth. `research/tech-stack-decision.md` argues the stack. The companion's watch presence (`10-ideas.md`) is a separate native target on either platform and needs its own place in the roadmap.
 - **[founder] Launch market.** Switzerland/Germany/Austria first for language and insurer programs, or English-speaking markets first for size? The monetization report proposes five countries.
@@ -38,6 +39,7 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 - **[founder] Pricing: the vision says free app, cosmetic revenue only** (`10-ideas.md` §2). To confirm before `06-business-model.md` is written: is the promise "no subscription, ever", or "the core is free forever" with cosmetics plus an optional supporter tier? Which cosmetics exist at launch, and are they also earnable through XP? The monetization report's benchmarks are subscription benchmarks and will be read against this choice, not instead of it.
 - **[founder] The companion** (`10-ideas.md` §1). Name, look, voice; can it be switched off; does Simple Mode have it; is the watch complication in the MVP or the first update.
 - **[founder] Jobs** (`10-ideas.md` §3). Which job first (cooking fits the Garden), self-reported only or verified through integrations, own levels or Journey XP. Assumed to be a phase after the health core is proven.
+- **[founder] Horizontal tracks** (`10-ideas.md` §4). Which "things to do" exist at launch beyond filling the sheet, exploring regions and earning claims; whether the user picks a primary surface (sheet, map, quests, collection, profile) in onboarding.
 - **[founder] B2B appetite.** Are insurer bonus programs and corporate wellness a target in year one, or consumer only?
 
 ## Legal
@@ -69,3 +71,4 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 | Age-specific targets (steps at 60+, sit-to-stand from 40) | Separate templates with inclusive age gates; skipped when the age is unknown | `packages/core/src/quests/templates.ts` |
 | Character Level formula and cap | Every stat is worth up to seven levels, unmeasured stats nothing (`1 + Σ 7 × stat/100`, cap 50, any data ≥ 2). Chosen over mean × √coverage because, on 2,000 synthetic users per cohort, it puts day-one wearable owners at median 11 instead of 17 and never lowers the level for measuring a weak stat | `packages/core/src/character/level.ts`, `demo/level-cohorts.ts`, `02-game-system.md` |
 | Can the Summit open with unmeasured stats? | No; it needs all seven measured and ≥ 50, plus level ≥ 25. Otherwise 15 % of day-one wearable owners would have started on the Summit | `packages/core/src/character/regions.ts` |
+| Do the backlog ideas (companion, cosmetics, jobs, horizontal tracks) gate the MVP? | No. The founder's standing priority is shipping an MVP; the ideas are filed and scheduled after it | `10-ideas.md`, `source/founder-notes.md` |
