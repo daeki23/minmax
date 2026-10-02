@@ -16,7 +16,7 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 - **[founder] Name.** Is MINMAX fixed, or open if the trademark search shows conflicts?
 - **[research] Default mode.** Game Mode or Simple Mode as the default for which cohort. Pending `research/user-psychology.md`.
 - **[research] Is Power a stat mainstream users understand**, or should it be folded into Strength for v1 and split later?
-- **[build] Character Level formula** and cap. Needs the stat model and a simulation on synthetic users so that typical new users land at levels 5–15, not 1 or 40.
+- **[founder] Level feel.** With the decided formula a fully measured median adult is level 26 of 50 and a day-one wearable owner about 11. If the founder wants the median adult lower (say 15–18) the mapping from percentile to level must become convex, which makes early percentile gains worth less; the simulation in `packages/core/src/demo/level-cohorts.ts` is set up to test that in minutes.
 - **[build] Rift pacing.** How soon after onboarding the bottleneck should start speaking.
 - **[build] Quests the engine cannot verify yet.** Per-muscle set logging (Forge set-volume quests), a GPS "outdoor" flag for green-space walks, HRV-guided session swaps, and the Summit meta quests need new data types before they join the catalogue (`research/training-science.md`, quest tables).
 - **[research] Pre-participation screening.** Should a PAR-Q+-style screen gate Engine III, the Arena and heavy bone loading? Not researched; the regulatory report should weigh in.
@@ -65,3 +65,5 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 | How does a quest with a self-reported part complete? | Through `self_report` check-ins only, trust 0, counted per quest inside its window; the host caps the XP | `packages/core/src/quests/progress.ts` |
 | Where do quest citations live? | In `CITATIONS`, keyed per template and resolved to numbered sources in the research reports; a test fails on an unknown or unused key | `packages/core/src/quests/templates.ts` |
 | Age-specific targets (steps at 60+, sit-to-stand from 40) | Separate templates with inclusive age gates; skipped when the age is unknown | `packages/core/src/quests/templates.ts` |
+| Character Level formula and cap | Every stat is worth up to seven levels, unmeasured stats nothing (`1 + Σ 7 × stat/100`, cap 50, any data ≥ 2). Chosen over mean × √coverage because, on 2,000 synthetic users per cohort, it puts day-one wearable owners at median 11 instead of 17 and never lowers the level for measuring a weak stat | `packages/core/src/character/level.ts`, `demo/level-cohorts.ts`, `02-game-system.md` |
+| Can the Summit open with unmeasured stats? | No; it needs all seven measured and ≥ 50, plus level ≥ 25. Otherwise 15 % of day-one wearable owners would have started on the Summit | `packages/core/src/character/regions.ts` |

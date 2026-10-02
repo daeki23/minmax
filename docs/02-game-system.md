@@ -85,7 +85,7 @@ Build = Class × Origin × observed behaviour. Examples: *Ironblood · Hybrid ·
 
 Two progressions, deliberately separate, because they measure different things: **[addition]**
 
-- **Character Level** is computed from stats. It is the honest, slow number. It can go down. A plateau is a plateau. Formula sketch: level is a monotone function of the mean of measured stats, with a penalty for the number of unmeasured stats so that measuring more is always rewarded. Range 1–50 for the base journey.
+- **Character Level** is computed from stats. It is the honest, slow number. It can go down. A plateau is a plateau. Formula **[decision]**: every stat is worth up to seven levels (its percentile or score divided by 100, times seven) and an unmeasured stat is worth nothing, so `level = 1 + Σ 7 × stat/100`, range 1–50. Level 1 is the empty sheet; any data makes it at least 2. Measuring a stat never lowers the level, however weak it turns out: the cost of a weakness is the Rift, not a lost level. During onboarding each import or test adds a few levels; after that the number moves only with the percentiles. On synthetic users (`pnpm --filter @minmax/core demo:levels`, 2,000 per cohort): a wearable owner on day one with steps, VO₂max estimate and sleep lands at level 5–18 (median 11, 73 % within 5–15); a sedentary one at 4–13 (median 8); a user with one in-app test at 2–7; a fully measured median adult at 26; a trained one around 34; the elite cohort tops out at 46. The cap needs the 99th percentile everywhere. An earlier variant (mean of measured stats × √coverage) put day-one users at median 17, lowered the level for one user in eight who measured a further stat, and opened the Summit to 15 % of day-one wearable owners with four stats unmeasured; the simulation is what retired it.
 - **Journey XP** is earned from effort: completed quests, logged sessions, imports, tests taken. It never goes down, resets per season or per journey, and gates region unlocks, cosmetics and narrative. It is the Duolingo-style "you did the thing" meter that keeps weeks with no measurable stat change from feeling empty.
 
 The character sheet shows both: `LEVEL 18` (state) and `XP 8,420 / 10,000` (effort toward the next region or chapter).
@@ -107,7 +107,7 @@ The bottleneck does not force a region. It opens a **Rift**: a side quest line i
 | **Temple of Motion** | Mobility, control, balance | Mobility | Home of Mobility class; else via Rift or XP |
 | **The Garden** | Nutrition, metabolic health | Nutrition | Home of Nutrition class; else via Rift or XP |
 | **The Sanctum** | Sleep, recovery, stress | Recovery | Opens automatically when sleep data is imported |
-| **The Summit** | Hybrid, advanced, long-horizon | All | Character Level ≥ 25 and no stat below 50 |
+| **The Summit** | Hybrid, advanced, long-horizon | All | Character Level ≥ 25, all seven stats measured, none below 50. The Summit trains everything, so it has to see everything; the requirement text names the unmeasured stats **[decision]** |
 
 Each region has **chapters** (quest lines of 3–6 weeks), each chapter has 3–5 quests. Regions are revisited; they are not consumed.
 
@@ -176,4 +176,4 @@ Dark, cinematic, restrained. Typography-led. Regions are evoked with light, text
 
 ## Open design questions
 
-See `09-open-questions.md`. The main ones: the Character Level formula and cap, whether Power deserves its own stat for mainstream users or is folded into Strength at the start, exact Rift pacing, and how Hybrid's rotating home region feels in practice.
+See `09-open-questions.md`. The main ones: whether Power deserves its own stat for mainstream users or is folded into Strength at the start, exact Rift pacing, how Hybrid's rotating home region feels in practice, and whether level 26 for a fully measured median adult is the right feel or the founder wants the midpoint elsewhere.

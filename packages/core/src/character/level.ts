@@ -1,23 +1,29 @@
 import type { StatId, StatValue } from "../types/stat.js";
 import { isMeasured, STATS, statMidpoint } from "../types/stat.js";
-import { clamp, mean } from "../util/math.js";
+import { clamp } from "../util/math.js";
 
 /**
  * Character Level: the honest, slow number computed from stats. It can go down.
- * level = 1 + 49 × (mean of measured stat midpoints / 100) × coverage factor
- * coverage factor = sqrt(measured / 7): a user with 4 of 7 stats measured at 64 lands around
- * level 24 rather than 32, so measuring more is always rewarded and never guessed.
- * Range 1–50 for the base journey. See docs/02-game-system.md "Level and XP".
+ *
+ *   level = 1 + Σ over measured stats of (LEVELS_PER_STAT × stat / 100)
+ *
+ * Every stat is worth up to seven levels; an unmeasured stat is worth nothing. So measuring a stat
+ * never lowers the level, however weak it turns out (the honest cost of a weakness is the Rift, not
+ * a lost level), and the level climbs by a few levels per in-app test during onboarding before it
+ * settles into the slow, percentile-driven number. Level 1 is the empty sheet; any data makes it at
+ * least 2. Range 1–50 for the base journey. The cohort numbers behind these choices are reproduced
+ * by `pnpm --filter @minmax/core demo:levels` and pinned in level.test.ts; see docs/02-game-system.md
+ * "Level and XP".
  */
 export const LEVEL_CAP = 50;
+export const LEVELS_PER_STAT = (LEVEL_CAP - 1) / STATS.length; // 7
 
 export function characterLevel(stats: Readonly<Record<StatId, StatValue>>): number {
   const measured = STATS.map((s) => stats[s]).filter(isMeasured);
   if (measured.length === 0) return 1;
-  const mu = mean(measured.map((v) => statMidpoint(v) as number));
-  const coverage = Math.sqrt(measured.length / STATS.length);
-  const raw = 1 + (LEVEL_CAP - 1) * (mu / 100) * coverage;
-  return clamp(Math.round(raw), 1, LEVEL_CAP);
+  let raw = 1;
+  for (const v of measured) raw += (LEVELS_PER_STAT * (statMidpoint(v) as number)) / 100;
+  return clamp(Math.round(raw), 2, LEVEL_CAP);
 }
 
 /**

@@ -22,7 +22,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "biome check src",
-    "demo": "tsx src/demo/character-sheet.ts"
+    "demo": "tsx src/demo/character-sheet.ts",
+    "demo:levels": "tsx src/demo/level-simulation.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",

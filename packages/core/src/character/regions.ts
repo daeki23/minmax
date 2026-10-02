@@ -23,7 +23,11 @@ export interface RegionStatus {
   readonly requirement: string | null;
 }
 
-/** Summit gate: level ≥ 25 and no measured stat below 50. */
+/**
+ * Summit gate: level ≥ 25, every stat measured and none below 50. The Summit trains everything, so
+ * it has to see everything: without the coverage rule a fit runner with three imported stats would
+ * stand on the Summit on day one (15 % of day-one wearable owners in the cohort simulation).
+ */
 export const SUMMIT_MIN_LEVEL = 25;
 export const SUMMIT_MIN_STAT = 50;
 /** Arena gate for safety: strength and mobility both at least 40. */
@@ -43,9 +47,18 @@ export function homeRegion(ctx: RegionContext): RegionId {
 
 export function summitGate(ctx: RegionContext): boolean {
   if (ctx.level < SUMMIT_MIN_LEVEL) return false;
-  return STATS.every(
-    (s) => !isMeasured(ctx.stats[s]) || (statMidpoint(ctx.stats[s]) as number) >= SUMMIT_MIN_STAT,
-  );
+  return STATS.every((s) => statAtLeast(ctx.stats, s, SUMMIT_MIN_STAT));
+}
+
+/** Measured stats that keep the Summit closed, for the requirement text. */
+function summitShortfall(ctx: RegionContext): { readonly unmeasured: StatId[]; readonly low: StatId[] } {
+  const unmeasured: StatId[] = [];
+  const low: StatId[] = [];
+  for (const s of STATS) {
+    if (!isMeasured(ctx.stats[s])) unmeasured.push(s);
+    else if ((statMidpoint(ctx.stats[s]) as number) < SUMMIT_MIN_STAT) low.push(s);
+  }
+  return { unmeasured, low };
 }
 
 export function regionStatus(region: RegionId, ctx: RegionContext): RegionStatus {
@@ -74,7 +87,13 @@ export function regionStatus(region: RegionId, ctx: RegionContext): RegionStatus
   if (region === "summit") {
     const ok = summitGate(ctx);
     if (ok) reasons.push("gate_met");
-    else requirement = `Level ≥ ${SUMMIT_MIN_LEVEL} and every measured stat ≥ ${SUMMIT_MIN_STAT}`;
+    else {
+      const { unmeasured, low } = summitShortfall(ctx);
+      const parts = [`Level ≥ ${SUMMIT_MIN_LEVEL}`, `every stat measured and ≥ ${SUMMIT_MIN_STAT}`];
+      if (unmeasured.length > 0) parts.push(`unmeasured: ${unmeasured.join(", ")}`);
+      if (low.length > 0) parts.push(`below ${SUMMIT_MIN_STAT}: ${low.join(", ")}`);
+      requirement = parts.join("; ");
+    }
     return { region, unlocked: ok, reasons: ok ? reasons : [], requirement: ok ? null : requirement };
   }
   if (reasons.length === 0) {

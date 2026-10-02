@@ -149,7 +149,7 @@ Decision pending; the judged comparison will be recorded in `research/tech-stack
 - `main` is always releasable; feature branches merge through pull requests with CI green (`.github/workflows/ci.yml` runs lint, typecheck, tests and build).
 - Three environments: local, staging with a sandbox signing key, production.
 - Content (norm tables, templates) ships with the app and is also fetchable from the content service, so a wrong citation or threshold can be fixed in hours.
-- A `pnpm --filter @minmax/core demo` command prints a full character sheet from fixtures; it doubles as a smoke test for every engine change.
+- A `pnpm --filter @minmax/core demo` command prints a full character sheet from fixtures; it doubles as a smoke test for every engine change. `demo:levels` prints the Character Level distribution over synthetic cohorts, for tuning the formula and the region gates.
 
 ## Open architecture decisions
 
