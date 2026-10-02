@@ -8,11 +8,19 @@ _Working title. Early stage: concept, research and domain engine. No app yet._
 
 | Area | State |
 |---|---|
-| Vision, product concept, game system, data provenance | Drafted, see `docs/00`–`03` |
-| Research (market, integrations, regulation, norms, ZK, monetization, psychology, training science, tech stack) | In progress, see `docs/research/` |
-| Evidence framework, architecture, business model, compliance, roadmap | Pending research results, see `docs/04`–`08` |
-| Domain engine (`packages/core`) | Planned next |
-| Mobile app, backend | Not started |
+| Vision, product concept, game system, data provenance, architecture | Drafted, see `docs/00`–`03` and `docs/05` |
+| Research (market, integrations, regulation done; norms, ZK, monetization, psychology, evidence, training science, tech stack in progress) | See `docs/research/` |
+| Evidence framework, business model, compliance, roadmap | Pending research results, see `docs/04`, `06`–`08` |
+| Domain engine (`packages/core`) | Built: provenance, stats, character, quests, claims, modes; 76 tests; synthetic norm tables until the normative-data report lands |
+| CI | GitHub Actions: lint, typecheck, test, build on every push |
+| Mobile app, backend | Not started; client framework decision pending |
+
+Try the engine without a UI:
+
+```
+pnpm install
+pnpm --filter @minmax/core demo
+```
 
 The founder's original ChatGPT material is preserved verbatim in `docs/source/`. The original main prompt is still missing; see `docs/09-open-questions.md`.
 
@@ -25,7 +33,7 @@ docs/
   02-game-system.md          Origin / Class / Build / Level, stats, bottleneck, regions, quests, modes
   03-data-provenance.md      trust levels, measurement schema, claims, phased proof architecture
   04-evidence-framework.md   (pending) how recommendations are tiered and what MINMAX never claims
-  05-architecture.md         (pending) stack decision, system design, local-first, sync
+  05-architecture.md         system design, data flow, engine contract, storage, integrations, server
   06-business-model.md       (pending) pricing, channels, revenue scenarios
   07-compliance.md           (pending) MDR/FDA wellness line, GDPR, store rules, checklist
   08-roadmap.md              (pending) phases and milestones
@@ -33,7 +41,15 @@ docs/
   research/                  fact-checked research reports with sources
   source/                    raw founder material
 packages/
-  core/                      (planned) platform-agnostic domain engine in TypeScript
+  core/                      @minmax/core: platform-agnostic domain engine in TypeScript (pure, tested)
+    src/types                metric specs, measurement, stat, character, claim types
+    src/provenance           confidence priors, recency, source resolution, daily aggregation
+    src/stats                norm tables, stat model, percentile computation
+    src/character            origin, class, level, bottleneck, regions, assemble
+    src/quests               templates, scheduler, progress
+    src/claims               predicate check, canonical payload, issue and verify
+    src/modes                Game Mode and Simple Mode vocabulary
+    src/demo                 character-sheet demo (pnpm --filter @minmax/core demo)
 apps/
   mobile/                    (planned)
   api/                       (planned)

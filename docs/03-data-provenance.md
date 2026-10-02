@@ -43,6 +43,8 @@ Measurement
   measured_at        timestamp (when the body was measured)
   recorded_at        timestamp (when MINMAX received it)
   source             enum   (self, minmax_app, apple_health, health_connect, garmin, oura, polar, whoop, withings, lab, ...)
+  via                enum   (device_direct, apple_health, health_connect, aggregator, in_app, manual, import) optional:
+                            the ingest path, so "Garmin via Apple Health" and "Oura via Oura API" stay distinguishable
   source_record_id   string  (vendor's id, for dedup and audit)
   device             { vendor, model, firmware? }  optional
   method             string  (e.g. "firstbeat_estimate", "cpet", "cooper_12min", "in_app_camera_count")

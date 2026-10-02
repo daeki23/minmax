@@ -48,3 +48,7 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 | Does HRV have an absolute target? | No; personal-baseline deviation only | `02-game-system.md`, `03-data-provenance.md` |
 | Does the MVP contain any blockchain? | No; provenance fields and signed claims only (Phase 0) | `03-data-provenance.md` |
 | Documentation language | English, because the product is global; conversation with the founder stays German | `README.md` |
+| How do several readings from a second source affect confidence? | Only that source's newest reading counts: one corroboration or one disagreement per source, never per reading | `packages/core/src/provenance/resolve.ts` |
+| Can two load quests for the same stat be scheduled in one week? | No, as a hard rule; the scheduler leaves a slot empty instead | `packages/core/src/quests/schedule.ts` |
+| Where does the server see health data? | Only vendor-webhook data it ingested itself; the phone is the system of record | `05-architecture.md` |
+| Garmin in the MVP? | Only through HealthKit and Health Connect; Garmin's developer program is closed to new applicants in 2026 | `05-architecture.md`, `research/wearable-integrations.md` |

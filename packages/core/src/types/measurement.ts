@@ -52,6 +52,23 @@ export const SOURCE_DEFAULT_TRUST: Readonly<Record<Source, TrustLevel>> = {
   aggregator: 2,
 };
 
+/**
+ * How a value reached MINMAX, independent of who produced it. "Garmin via Apple Health" and
+ * "Oura via the Oura API" are both device-verified, but the trust detail view and claims must be able
+ * to tell them apart. See docs/05-architecture.md (Integrations layer).
+ */
+export const INGEST_PATHS = [
+  "device_direct", // the vendor's own SDK or API, server- or app-side
+  "apple_health",
+  "health_connect",
+  "aggregator",
+  "in_app", // recorded by MINMAX itself (tests, sessions)
+  "manual", // typed in by the user
+  "import", // file import (CSV, lab PDF)
+] as const;
+
+export type IngestPath = (typeof INGEST_PATHS)[number];
+
 export type Verification =
   | "unverified" // nothing beyond the value itself
   | "source_authenticated" // came through an authenticated vendor account or platform store
@@ -75,6 +92,8 @@ export interface Measurement {
   /** When MINMAX received it (ISO 8601). */
   readonly recordedAt: string;
   readonly source: Source;
+  /** Ingest path; omitted means the source's own path. */
+  readonly via?: IngestPath;
   readonly sourceRecordId?: string;
   readonly device?: Device;
   /** How the value was produced, e.g. "firstbeat_estimate", "cpet", "cooper_12min", "manual_entry". */
