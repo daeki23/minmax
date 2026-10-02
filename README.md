@@ -11,7 +11,7 @@ _Working title. Early stage: concept, research and domain engine. No app yet._
 | Vision, product concept, game system, data provenance, architecture | Drafted, see `docs/00`–`03` and `docs/05` |
 | Research (market, integrations, regulation done; norms, ZK, monetization, psychology, evidence, training science, tech stack in progress) | See `docs/research/` |
 | Evidence framework, business model, compliance, roadmap | Pending research results, see `docs/04`, `06`–`08` |
-| Domain engine (`packages/core`) | Built: provenance, stats, character, quests, claims, modes; 118 tests; published (provisional) norm tables from the normative-data report, probit-space percentiles, criterion scores labelled as such; cited quest catalogue (65 templates, 51 citation keys) from the training-science report with opt-in, D-tier and age-gate rules; Character Level formula and Summit gate tuned on a synthetic-cohort simulation (`pnpm --filter @minmax/core demo:levels`) |
+| Domain engine (`packages/core`) | Built: provenance, stats, character, quests, claims, modes; 121 tests; published (provisional) norm tables from the normative-data report, probit-space percentiles, criterion scores labelled as such; cited quest catalogue (65 templates, 51 citation keys) from the training-science report with opt-in, D-tier and age-gate rules; Character Level formula and Summit gate tuned on a synthetic-cohort simulation (`pnpm --filter @minmax/core demo:levels`); conformance vectors for ports (`packages/core/conformance/`) |
 | CI | GitHub Actions: lint, typecheck, test, build on every push |
 | Mobile app, backend | Not started; client framework decision pending |
 
@@ -51,6 +51,8 @@ packages/
     src/claims               predicate check, canonical payload, issue and verify
     src/modes                Game Mode and Simple Mode vocabulary
     src/demo                 character-sheet demo (pnpm --filter @minmax/core demo)
+    src/conformance          generator and test for the conformance vectors
+    conformance/             vectors.json and README: what a port of the engine must reproduce
 apps/
   mobile/                    (planned)
   api/                       (planned)

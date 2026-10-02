@@ -1,5 +1,6 @@
 // @minmax/core — platform-agnostic domain engine. No I/O, no vendor SDKs, no crypto: hosts inject those.
 
+export * from "./character/assemble.js";
 export * from "./character/bottleneck.js";
 export * from "./character/class.js";
 export * from "./character/level.js";
@@ -13,6 +14,7 @@ export * from "./quests/progress.js";
 export * from "./quests/schedule.js";
 export * from "./quests/templates.js";
 export * from "./quests/types.js";
+export * from "./recovery/hrv.js";
 export * from "./stats/compute.js";
 export * from "./stats/model.js";
 export * from "./stats/norms.js";

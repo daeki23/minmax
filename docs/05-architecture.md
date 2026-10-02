@@ -131,7 +131,7 @@ Hosting in the EU (Frankfurt or Zürich) keeps the GDPR data-transfer analysis s
 Decision pending; the judged comparison will be recorded in `research/tech-stack-decision.md` and summarised here. The non-negotiables that any choice must satisfy:
 
 1. Native access to HealthKit and Health Connect, including background delivery and history permissions.
-2. Reuse of `@minmax/core` without a port, or a port with a conformance test suite run against the TypeScript reference.
+2. Reuse of `@minmax/core` without a port, or a port that passes the conformance vectors in `packages/core/conformance/` (generated from the TypeScript reference, pinned by its tests; see the README there for tolerances and the rounding trap).
 3. Encrypted local database and platform keystore access.
 4. A rendering path for the dark, cinematic Game Mode that stays at 60 fps on mid-range Android devices.
 5. One solo developer can ship both stores from one codebase.
@@ -150,6 +150,7 @@ Decision pending; the judged comparison will be recorded in `research/tech-stack
 - Three environments: local, staging with a sandbox signing key, production.
 - Content (norm tables, templates) ships with the app and is also fetchable from the content service, so a wrong citation or threshold can be fixed in hours.
 - A `pnpm --filter @minmax/core demo` command prints a full character sheet from fixtures; it doubles as a smoke test for every engine change. `demo:levels` prints the Character Level distribution over synthetic cohorts, for tuning the formula and the region gates.
+- `packages/core/conformance/vectors.json` records the engine's outputs for fixed inputs (norm lookups, levels, origins, bottleneck transitions, region gates, the fixture user end to end, claim payloads, quest progress). A test fails when the engine drifts from it, so an intended behaviour change regenerates the file (`pnpm --filter @minmax/core vectors`) and the diff documents the change. Any port of the engine must reproduce the file.
 
 ## Open architecture decisions
 
