@@ -34,7 +34,7 @@ export function hrvReadiness(all: readonly Measurement[], now: string): HrvReadi
     .filter(({ age }) => age >= 0 && age <= HRV_BASELINE_DAYS)
     .sort((a, b) => a.age - b.age);
   const latest = hrv[0];
-  if (!latest) return { kind: "insufficient_baseline", samples: 0, needed: HRV_MIN_BASELINE_SAMPLES };
+  if (!latest) return { kind: "insufficient_baseline", samples: 0, needed: HRV_MIN_BASELINE_SAMPLES + 1 };
 
   const sameSource = hrv.filter((x) => x.m.source === latest.m.source && x.m.id !== latest.m.id);
   if (sameSource.length < HRV_MIN_BASELINE_SAMPLES) {

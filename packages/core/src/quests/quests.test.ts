@@ -94,6 +94,15 @@ describe("scheduleWeek", () => {
     for (const n of loadByStat.values()) expect(n).toBeLessThanOrEqual(1);
   });
 
+  it("leaves a slot empty rather than schedule a second load quest for a stat", () => {
+    const forgeLoad = QUEST_TEMPLATES.filter((t) => t.region === "forge" && t.tags.includes("load"));
+    expect(forgeLoad.length).toBeGreaterThan(1);
+    const qs = scheduleWeek(
+      baseCtx({ unlocked: ["forge"], homeRegion: "forge", bottleneck: null, templates: forgeLoad }),
+    );
+    expect(qs).toHaveLength(1);
+  });
+
   it("only uses unlocked regions", () => {
     const qs = scheduleWeek(baseCtx({ unlocked: ["wilds"], homeRegion: "wilds", bottleneck: null }));
     for (const q of qs) expect(templateById(q.templateId)?.region).toBe("wilds");

@@ -75,10 +75,14 @@ export function scheduleWeek(ctx: ScheduleContext): Quest[] {
       !usedTemplates.has(t.id),
   );
 
+  // Hard rules, never just a score penalty: no template twice, and one load quest per stat per week.
+  const allowed = (t: QuestTemplate): boolean =>
+    !usedTemplates.has(t.id) && !(t.tags.includes("load") && loadStats.has(t.stat));
+
   const pick = (candidates: readonly QuestTemplate[]): QuestTemplate | null => {
-    const fresh = candidates.filter((t) => !ctx.recentlyCompleted.includes(t.id) && !usedTemplates.has(t.id));
-    const pool = fresh.length ? fresh : candidates.filter((t) => !usedTemplates.has(t.id));
-    const ranked = [...pool].sort((a, b) => score(b) - score(a));
+    const pool = candidates.filter(allowed);
+    const fresh = pool.filter((t) => !ctx.recentlyCompleted.includes(t.id));
+    const ranked = [...(fresh.length ? fresh : pool)].sort((a, b) => score(b) - score(a));
     return ranked[0] ?? null;
   };
 
@@ -90,7 +94,6 @@ export function scheduleWeek(ctx: ScheduleContext): Quest[] {
     s -= Math.abs(t.difficulty - wantDifficulty) * 3; // right difficulty
     if (!isMeasured(stat) && (t.tags.includes("test") || t.tags.includes("import"))) s += 6; // fill the sheet
     if (isMeasured(stat) && t.tags.includes("test")) s -= 2; // don't re-test measured stats too eagerly
-    if (t.tags.includes("load") && loadStats.has(t.stat)) s -= 100; // one load quest per stat per week
     if (ctx.bottleneck === t.stat) s += 2;
     return s;
   };

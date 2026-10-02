@@ -65,8 +65,16 @@ export function resolveMetric(
   const sources = new Set<Source>([preferred.m.source]);
   const ids = [preferred.m.id];
 
-  // Corroboration / disagreement only against other sources at the same trust level within the window.
-  const others = top.filter((c) => c.m.source !== preferred.m.source && c.age <= spec.freshnessDays);
+  // Corroboration / disagreement only against the most recent value of each OTHER source at the same
+  // trust level, inside the freshness window. A source never corroborates itself, and a source's older
+  // readings never count as disagreement with its own newer one (`top` is sorted most recent first).
+  const seenSources = new Set<Source>([preferred.m.source]);
+  const others: typeof top = [];
+  for (const c of top) {
+    if (c.age > spec.freshnessDays || seenSources.has(c.m.source)) continue;
+    seenSources.add(c.m.source);
+    others.push(c);
+  }
   for (const o of others) {
     const delta = Math.abs(o.m.value - preferred.m.value);
     if (delta <= spec.tolerance) {

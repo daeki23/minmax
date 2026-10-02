@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { m, NOW } from "../__fixtures__/measurements.js";
-import { priorConfidence, recencyFactor, withProvenance } from "./confidence.js";
+import { corroborated, priorConfidence, recencyFactor, withProvenance } from "./confidence.js";
 import { aggregateDaily, resolveMetric } from "./resolve.js";
 
 describe("provenance priors", () => {
@@ -72,6 +72,21 @@ describe("resolveMetric", () => {
     expect(e?.rule).toBe("disagreement");
     expect(e?.disagreement?.withSource).toBe("apple_health");
     expect(e?.confidence).toBeLessThan(g.confidence);
+  });
+
+  it("counts a second source once, however many readings it has, and compares only its newest", () => {
+    const g = m("vo2max", 52, { source: "garmin", daysAgo: 0 });
+    const appleNewest = m("vo2max", 51, { source: "apple_health", daysAgo: 1 });
+    const appleOlder = [
+      m("vo2max", 51.5, { source: "apple_health", daysAgo: 2 }),
+      // An old, very different reading from the same other source is not a disagreement today.
+      m("vo2max", 40, { source: "apple_health", daysAgo: 3 }),
+    ];
+    const e = resolveMetric("vo2max", [g, appleNewest, ...appleOlder], { now: NOW });
+    expect(e?.rule).toBe("corroborated");
+    expect(e?.disagreement).toBeUndefined();
+    expect(e?.confidence).toBeCloseTo(corroborated(g.confidence), 6);
+    expect(e?.measurementIds).toEqual([g.id, appleNewest.id]);
   });
 
   it("never averages across trust levels", () => {
