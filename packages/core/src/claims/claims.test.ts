@@ -48,7 +48,7 @@ describe("canonicalize", () => {
 describe("checkPredicate", () => {
   it("metric threshold met with device trust", () => {
     const r = checkPredicate(
-      { kind: "metric", metric: "vo2max", op: ">=", threshold: 50, unit: "ml/kg/min" },
+      { kind: "metric", metric: "vo2max", op: ">=", threshold: 48, unit: "ml/kg/min" },
       evidence(),
     );
     expect(r.satisfied).toBe(true);
@@ -63,6 +63,20 @@ describe("checkPredicate", () => {
       evidence(),
     );
     expect(r).toEqual({ satisfied: false, reason: "not_met" });
+  });
+
+  it("a threshold met only within measurement error is not certified below clinical trust", () => {
+    // Fixture VO2max is 52 from a wrist estimate; 51 is inside the metric's tolerance.
+    const r = checkPredicate(
+      { kind: "metric", metric: "vo2max", op: ">=", threshold: 51, unit: "ml/kg/min" },
+      evidence(),
+    );
+    expect(r).toEqual({ satisfied: false, reason: "within_error" });
+  });
+
+  it("stat percentiles beyond the published reference tail cannot be certified", () => {
+    const r = checkPredicate({ kind: "stat", stat: "aerobic", op: ">=", percentile: 99 }, evidence());
+    expect(r).toEqual({ satisfied: false, reason: "beyond_reference" });
   });
 
   it("unmeasured metric cannot be claimed", () => {
@@ -106,7 +120,7 @@ describe("checkPredicate", () => {
 describe("issueClaim / verifyClaim", () => {
   it("issues a signed, coarse claim and verifies it", async () => {
     const res = await issueClaim(
-      { kind: "metric", metric: "vo2max", op: ">=", threshold: 50, unit: "ml/kg/min" },
+      { kind: "metric", metric: "vo2max", op: ">=", threshold: 48, unit: "ml/kg/min" },
       evidence(),
       opts,
       fakeSigner,
@@ -122,7 +136,7 @@ describe("issueClaim / verifyClaim", () => {
 
   it("rejects tampered and expired claims", async () => {
     const claim = (await issueClaim(
-      { kind: "metric", metric: "vo2max", op: ">=", threshold: 50, unit: "ml/kg/min" },
+      { kind: "metric", metric: "vo2max", op: ">=", threshold: 48, unit: "ml/kg/min" },
       evidence(),
       opts,
       fakeSigner,

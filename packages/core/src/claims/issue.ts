@@ -18,11 +18,33 @@ export type PredicateCheck =
   | { readonly satisfied: true; readonly trust: TrustLevel; readonly sources: readonly Source[] }
   | {
       readonly satisfied: false;
-      readonly reason: "unmeasured" | "not_met" | "range_too_wide" | "low_confidence";
+      readonly reason:
+        | "unmeasured"
+        | "not_met"
+        | "within_error"
+        | "range_too_wide"
+        | "low_confidence"
+        | "beyond_reference";
     };
 
 /** Minimum confidence to issue a claim at all; a claim is a promise, not a guess. */
 export const CLAIM_MIN_CONFIDENCE = 0.6;
+
+/**
+ * Published reference tables resolve the tail to the 95th percentile at best (FRIEND VO2max p95,
+ * grip strength p90). Beyond that the engine's percentile is a modelled extrapolation, which may be
+ * shown to the user as such but never certified. See research/normative-data.md.
+ */
+export const CLAIM_MAX_STAT_PERCENTILE = 95;
+
+/**
+ * A claim must beat the measurement error, not only the threshold: a wrist VO2max of 46 does not
+ * certify "≥ 45". Below clinical trust the metric's tolerance stands in for one standard error until
+ * per-source error bars are wired in (research/wearable-integrations.md).
+ */
+export function claimErrorMargin(metric: Metric, trust: TrustLevel): number {
+  return trust >= 3 ? 0 : METRIC_SPECS[metric].tolerance;
+}
 
 /**
  * Evaluate a predicate honestly:
@@ -36,12 +58,16 @@ export function checkPredicate(p: Predicate, ev: ClaimEvidence): PredicateCheck 
       const e = ev.estimates.get(p.metric);
       if (!e) return { satisfied: false, reason: "unmeasured" };
       if (e.confidence < CLAIM_MIN_CONFIDENCE) return { satisfied: false, reason: "low_confidence" };
-      const ok = p.op === ">=" ? e.value >= p.threshold : e.value <= p.threshold;
-      return ok
+      const nominal = p.op === ">=" ? e.value >= p.threshold : e.value <= p.threshold;
+      if (!nominal) return { satisfied: false, reason: "not_met" };
+      const margin = claimErrorMargin(p.metric, e.trustLevel);
+      const beyondError = p.op === ">=" ? e.value - margin >= p.threshold : e.value + margin <= p.threshold;
+      return beyondError
         ? { satisfied: true, trust: e.trustLevel, sources: e.sources }
-        : { satisfied: false, reason: "not_met" };
+        : { satisfied: false, reason: "within_error" };
     }
     case "stat": {
+      if (p.percentile > CLAIM_MAX_STAT_PERCENTILE) return { satisfied: false, reason: "beyond_reference" };
       const s = ev.stats[p.stat];
       if (!isMeasured(s)) return { satisfied: false, reason: "unmeasured" };
       if (s.kind === "range") return { satisfied: false, reason: "range_too_wide" };

@@ -97,6 +97,11 @@ Claim
 
 Claims are what the public profile shows, what a challenge checks, and what an insurer or coach would receive. They are deliberately coarse. A claim never contains the raw value, the device id, timestamps finer than a day, or anything that lets a verifier reconstruct the measurement series.
 
+Two honesty rules decide whether a claim may be issued at all (`research/normative-data.md`): **[decision]**
+
+- **A claim must beat the measurement error, not only the threshold.** Below clinical trust the value minus one error margin has to clear the threshold; a wrist VO₂max of 46 does not certify "≥ 45". Until per-vendor error bars are wired in, the metric's tolerance stands in for the margin.
+- **Stat claims stop where the reference tables stop.** Published norms resolve the tail to the 95th percentile at best (grip strength only to the 90th). Percentiles beyond that are a modelled extrapolation, shown to the user as such but never certified, so "Top 1 %" is not a claim MINMAX issues until a table supports it.
+
 ## Phased proof architecture
 
 | Phase | What ships | What it proves | Dependency |
