@@ -12,6 +12,7 @@ const point: StatValue = {
   normStatus: "verified",
   contributions: [],
   computedAt: NOW,
+  engineVersion: "test",
 };
 const range: StatValue = {
   stat: "mobility",
@@ -24,6 +25,7 @@ const range: StatValue = {
   normStatus: "verified",
   contributions: [],
   computedAt: NOW,
+  engineVersion: "test",
 };
 const none: StatValue = {
   stat: "power",
@@ -31,6 +33,7 @@ const none: StatValue = {
   missing: [],
   contributions: [],
   computedAt: NOW,
+  engineVersion: "test",
 };
 
 describe("vocabulary", () => {

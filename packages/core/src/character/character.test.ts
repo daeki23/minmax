@@ -18,10 +18,11 @@ function point(stat: StatId, value: number, confidence = 0.8): StatValue {
     normStatus: "synthetic",
     contributions: [],
     computedAt: NOW,
+    engineVersion: "test",
   };
 }
 function unmeasured(stat: StatId): StatValue {
-  return { stat, kind: "unmeasured", missing: [], contributions: [], computedAt: NOW };
+  return { stat, kind: "unmeasured", missing: [], contributions: [], computedAt: NOW, engineVersion: "test" };
 }
 function sheet(values: Partial<Record<StatId, number>>, confidence = 0.8): Record<StatId, StatValue> {
   const out = {} as Record<StatId, StatValue>;

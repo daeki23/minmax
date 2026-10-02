@@ -4,6 +4,7 @@ import type { Metric } from "../types/metric.js";
 import type { MetricContribution, NormStatus, StatId, StatValue } from "../types/stat.js";
 import { STATS } from "../types/stat.js";
 import { clamp, round, weightedMean } from "../util/math.js";
+import { ENGINE_VERSION } from "../version.js";
 import { POINT_CONFIDENCE_MIN, POINT_COVERAGE_MIN, RANGE_COVERAGE_MIN, STAT_MODEL } from "./model.js";
 import type { NormRegistry } from "./norms.js";
 import { percentileFor } from "./norms.js";
@@ -47,6 +48,7 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
         confidence: 0,
         trustLevel: null,
         normStatus: table ? table.status : null,
+        normVersion: table ? table.version : null,
         measurementIds: est ? est.measurementIds : [],
       });
       continue;
@@ -61,6 +63,7 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
         confidence: 0,
         trustLevel: est.trustLevel,
         normStatus: table.status,
+        normVersion: table.version,
         measurementIds: est.measurementIds,
       });
       continue;
@@ -73,6 +76,7 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
       confidence: est.confidence,
       trustLevel: est.trustLevel,
       normStatus: table.status,
+      normVersion: table.version,
       measurementIds: est.measurementIds,
     });
   }
@@ -84,7 +88,14 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
   const requiredMissing = inputs.some((i) => i.required && missing.includes(i.metric));
 
   if (coverage < RANGE_COVERAGE_MIN || measured.length === 0 || requiredMissing) {
-    return { stat, kind: "unmeasured", missing, contributions, computedAt: ctx.now };
+    return {
+      stat,
+      kind: "unmeasured",
+      missing,
+      contributions,
+      computedAt: ctx.now,
+      engineVersion: ENGINE_VERSION,
+    };
   }
 
   const value = weightedMean(measured.map((c) => [c.percentile, c.weight] as const));
@@ -103,6 +114,7 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
       normStatus,
       contributions,
       computedAt: ctx.now,
+      engineVersion: ENGINE_VERSION,
     };
   }
 
@@ -120,6 +132,7 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
     normStatus,
     contributions,
     computedAt: ctx.now,
+    engineVersion: ENGINE_VERSION,
   };
 }
 

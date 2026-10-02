@@ -23,6 +23,7 @@ function point(stat: StatId, value: number): StatValue {
     normStatus: "synthetic",
     contributions: [],
     computedAt: NOW,
+    engineVersion: "test",
   };
 }
 function sheet(values: Partial<Record<StatId, number>>): Record<StatId, StatValue> {
@@ -31,7 +32,14 @@ function sheet(values: Partial<Record<StatId, number>>): Record<StatId, StatValu
     const v = values[s];
     out[s] =
       v === undefined
-        ? { stat: s, kind: "unmeasured", missing: [], contributions: [], computedAt: NOW }
+        ? {
+            stat: s,
+            kind: "unmeasured",
+            missing: [],
+            contributions: [],
+            computedAt: NOW,
+            engineVersion: "test",
+          }
         : point(s, v);
   }
   return out;

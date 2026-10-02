@@ -23,3 +23,4 @@ export * from "./types/metric.js";
 export * from "./types/stat.js";
 export * from "./util/math.js";
 export * from "./util/time.js";
+export * from "./version.js";

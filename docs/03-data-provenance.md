@@ -59,8 +59,10 @@ Derived objects reference measurements, never copy values:
 
 ```
 MetricEstimate   one current best value per metric, with the list of measurement ids it came from and the rule used
-StatValue        one 0-100 percentile per stat, with the metric estimates, norm table version and confidence
-Claim            a threshold statement over stat values or metric estimates (see below)
+StatValue        one 0-100 percentile per stat, with the metric estimates, norm table version per metric,
+                 confidence and the engine version that computed it
+Claim            a threshold statement over stat values or metric estimates (see below), signed together
+                 with the engine version that evaluated it
 ```
 
 ## Resolving disagreement between sources

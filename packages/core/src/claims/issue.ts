@@ -6,6 +6,7 @@ import { METRIC_SPECS } from "../types/metric.js";
 import type { StatId, StatValue } from "../types/stat.js";
 import { isMeasured } from "../types/stat.js";
 import { addDays, toDateOnly } from "../util/time.js";
+import { ENGINE_VERSION } from "../version.js";
 
 export interface ClaimEvidence {
   readonly estimates: ReadonlyMap<Metric, MetricEstimate>;
@@ -95,6 +96,7 @@ export function buildUnsignedClaim(
     issuedAt: toDateOnly(o.now),
     issuer: o.issuer,
     schema: "minmax.claim.v0",
+    engineVersion: ENGINE_VERSION,
   };
 }
 

@@ -34,6 +34,8 @@ export interface UnsignedClaim {
   readonly issuedAt: string;
   readonly issuer: string;
   readonly schema: "minmax.claim.v0";
+  /** Engine version that evaluated the predicate; part of the signed payload. */
+  readonly engineVersion: string;
 }
 
 export interface Claim extends UnsignedClaim {

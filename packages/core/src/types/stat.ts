@@ -33,6 +33,8 @@ export interface MetricContribution {
   readonly confidence: number;
   readonly trustLevel: TrustLevel | null;
   readonly normStatus: NormStatus | null;
+  /** Version of the norm table used, so the percentile can be reproduced. */
+  readonly normVersion: string | null;
   readonly measurementIds: readonly string[];
 }
 
@@ -50,6 +52,7 @@ export type StatValue =
       readonly normStatus: NormStatus;
       readonly contributions: readonly MetricContribution[];
       readonly computedAt: string;
+      readonly engineVersion: string;
     }
   | {
       readonly stat: StatId;
@@ -62,6 +65,7 @@ export type StatValue =
       readonly normStatus: NormStatus;
       readonly contributions: readonly MetricContribution[];
       readonly computedAt: string;
+      readonly engineVersion: string;
     }
   | {
       readonly stat: StatId;
@@ -69,6 +73,7 @@ export type StatValue =
       readonly missing: readonly Metric[];
       readonly contributions: readonly MetricContribution[];
       readonly computedAt: string;
+      readonly engineVersion: string;
     };
 
 export function statMidpoint(s: StatValue): number | null {
