@@ -11,7 +11,7 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 ## Product
 
 - **[founder] Is the training program part of the product?** Three readings are possible: (a) MINMAX is the game layer and plans come from quests only; (b) MINMAX ships the founder's own program as premium chapters; (c) MINMAX is a platform where coaches publish chapters. The MVP assumes (a).
-- **[founder] Platforms.** iOS first, Android first, or both at once? The assumption is both via a cross-platform stack, iOS store first because of HealthKit depth and subscription revenue share. `research/tech-stack-decision.md` argues the stack.
+- **[founder] Platforms.** iOS first, Android first, or both at once? The assumption is both via a cross-platform stack, iOS store first because of HealthKit depth. `research/tech-stack-decision.md` argues the stack. The companion's watch presence (`10-ideas.md`) is a separate native target on either platform and needs its own place in the roadmap.
 - **[founder] Launch market.** Switzerland/Germany/Austria first for language and insurer programs, or English-speaking markets first for size? The monetization report proposes five countries.
 - **[founder] Name.** Is MINMAX fixed, or open if the trademark search shows conflicts?
 - **[research] Default mode.** Game Mode or Simple Mode as the default for which cohort. Pending `research/user-psychology.md`.
@@ -35,7 +35,9 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 
 - **[founder] Budget and time.** Full-time or evenings? Any capital? This decides whether the MVP is three months or nine.
 - **[founder] Entity and location.** Where the company sits determines GDPR lead authority, VAT, store accounts and which insurer programs are reachable.
-- **[founder] Pricing instinct.** A monthly subscription around the Strava/Oura band, a higher Whoop-style band, or freemium with cosmetics? The monetization report gives benchmarks; the final call is the founder's.
+- **[founder] Pricing: the vision says free app, cosmetic revenue only** (`10-ideas.md` §2). To confirm before `06-business-model.md` is written: is the promise "no subscription, ever", or "the core is free forever" with cosmetics plus an optional supporter tier? Which cosmetics exist at launch, and are they also earnable through XP? The monetization report's benchmarks are subscription benchmarks and will be read against this choice, not instead of it.
+- **[founder] The companion** (`10-ideas.md` §1). Name, look, voice; can it be switched off; does Simple Mode have it; is the watch complication in the MVP or the first update.
+- **[founder] Jobs** (`10-ideas.md` §3). Which job first (cooking fits the Garden), self-reported only or verified through integrations, own levels or Journey XP. Assumed to be a phase after the health core is proven.
 - **[founder] B2B appetite.** Are insurer bonus programs and corporate wellness a target in year one, or consumer only?
 
 ## Legal

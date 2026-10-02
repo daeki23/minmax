@@ -172,7 +172,9 @@ When Character Level reaches the base cap or the user hits a personal milestone,
 
 ## Aesthetic direction
 
-Dark, cinematic, restrained. Typography-led. Regions are evoked with light, texture and sound, not mascots. Animation is reserved for state changes (level up, region open, claim verified). Reference feel: a premium instrument, not a toy. Concept art and a design system are a later workstream.
+Dark, cinematic, restrained. Typography-led. Regions are evoked with light, texture and sound. Animation is reserved for state changes (level up, region open, claim verified). Reference feel: a premium instrument, not a toy. Concept art and a design system are a later workstream.
+
+The founder's vision adds a **companion**: a small character on phone and watch that greets the user, speaks the three trust promises (data stays local, the app is free, revenue is cosmetic) and announces the week's quests. It replaces the earlier "no mascots" line; the design brief is a companion that belongs in this world rather than a pet that bounces for attention. Details, tensions and open questions in `10-ideas.md`.
 
 ## Open design questions
 

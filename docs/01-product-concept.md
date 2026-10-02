@@ -77,7 +77,7 @@ Out (explicitly, for the first release):
 |---|---|---|
 | Normative data is thin for Mobility and Power | Good norms exist for VO₂max, grip, steps, sleep; much less for ROM | Show ranges and "emerging norm" labels; collect our own anonymised distributions with consent |
 | Wearable estimates are noisy | Wrist VO₂max can be off by several points | Confidence model, corroboration, in-app field tests as upgrade quests |
-| RPG framing reads as childish | Adults are sensitive to tone | Dark premium aesthetic, Simple Mode default for some cohorts, no mascots |
+| RPG framing reads as childish | Adults are sensitive to tone | Dark premium aesthetic, Simple Mode default for some cohorts; the founder's companion (`10-ideas.md`) must pass a tone test with the 35–55 cohort |
 | Labels demotivate | An Origin could feel like a verdict | Origin is shape not rank; copy is strengths-first; tested in onboarding research |
 | Health-data regulation | Special-category data in every market | Local-first, minimal server data, DPIA before launch, claims-not-data sharing |
 | Solo founder bandwidth | Everything above is a lot | Core engine first, one platform-store at a time, aggregator for long-tail devices |
