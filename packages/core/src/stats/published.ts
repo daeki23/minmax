@@ -44,7 +44,11 @@ function normalAnchors(mean: number, sd: number): readonly PercentileAnchor[] {
 /**
  * §1 Table A1: VO2peak (ml/kg/min), treadmill CPET, FRIEND 2022 [1] via secondary transcription [2].
  * P5/P25/P50/P75/P95. The 20-29 band is extended down to 18 as an approximation.
- * Open question 1 of the report: confirm against the primary table before "verified".
+ * Open question 1 of the report: confirm against the primary table before "verified". The fact-check
+ * of the report flags the WOMEN's rows in particular: their medians sit only 0.3-2.0 ml/kg/min below
+ * the 2015 FRIEND table where the paper's abstract reports a 1.5-4.6 drop, so they may be
+ * mis-transcribed in the secondary source. Until the primary table is checked the women's Aerobic
+ * percentile is provisional in the strong sense and must not back a claim.
  */
 const FRIEND_MEN: readonly (readonly [number, number, number, number, number, number, number])[] = [
   [20, 29, 24.8, 37.3, 45.4, 52.6, 62.1],
@@ -301,6 +305,9 @@ function pushupTable(
  * mean ± SD for 51-55 y (men 26.2 ± 4.1 cm, women 18.7 ± 3.9 cm) and 65+ (22.1 ± 3.0; 15.0 ± 3.9) and a
  * decline of about 0.9 %/year after the peak at 17-18. Bands below 51 are extrapolated from the 51-55
  * anchor with that decline, bands above 65 use the 65+ anchor; SD scales with the mean. MODELLED.
+ * Most of the sample is children; only about 340 men and 1,330 women are over 20, and the men's
+ * anchor cells are tiny (n = 10 at 51-55, n = 7 over 65). Tail percentiles for adults are therefore
+ * not credible and the report asks for no tail claims on Power until a better adult source exists.
  */
 function cmjTable(sex: "male" | "female"): NormTable {
   const anchor53 = sex === "male" ? { mean: 26.2, sd: 4.1 } : { mean: 18.7, sd: 3.9 };
@@ -334,7 +341,8 @@ function cmjTable(sex: "male" | "female"): NormTable {
     basis: "population",
     source:
       "Koivunen K et al., Effect of age and sex on lower-extremity power, 30,217 Finnish participants, Scand J Med Sci Sports 2026 [17]; modelled from mean ± SD",
-    population: "30,217 Finns aged 6-75 (5,413 women), contact-mat countermovement jump",
+    population:
+      "30,217 Finns aged 6-75 (5,413 women), contact-mat countermovement jump; adults are a small minority of the sample (about 340 men, 1,330 women over 20)",
     protocol:
       "countermovement jump height on a contact mat; phone-based measurement needs its own validation",
     version: PUBLISHED_TABLES_VERSION,
