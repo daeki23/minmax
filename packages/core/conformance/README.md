@@ -29,6 +29,18 @@ Timestamps are fixed (`now` is `2026-10-02T12:00:00.000Z`); host hooks (id facto
 - **Map outputs**: `fixture.estimates` is the engine's `Map<Metric, MetricEstimate>` written as an array sorted by metric name.
 - **`undefined` fields** are absent in the JSON (JavaScript drops them); a port must treat a missing optional field and an absent one as the same thing.
 
+## Runtimes checked
+
+A port is not the only thing that can drift from the reference; a different JavaScript engine can too. `runtimes/hermes/` runs the generator inside Hermes, the engine React Native ships, and compares with this file:
+
+```
+cd packages/core/conformance/runtimes/hermes
+npm install
+npm run check
+```
+
+Result on 2026-10-02 with Hermes 0.12 (the CLI build on npm; React Native's bundled Hermes is newer): every vector within tolerance, all eight claim payloads byte-identical, largest float difference 1.4e-14 (`percentileFor`), 73 ms for the whole run. The bundle has to lower `class` syntax first (Hermes 0.12 has no native classes; Metro's Babel preset does the same for an app), and the engine needs no `Intl`, `WebAssembly`, `BigInt` or async code, so this is the whole compatibility surface. The folder is standalone and installs its own Hermes, esbuild and Babel; the engine package carries none of them.
+
 ## Regenerating
 
 ```

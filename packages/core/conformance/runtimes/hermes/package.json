@@ -1,0 +1,15 @@
+{
+  "name": "minmax-conformance-hermes",
+  "private": true,
+  "description": "Runs the @minmax/core conformance generator inside the Hermes JavaScript engine and compares the result with conformance/vectors.json. Standalone on purpose: not part of the pnpm workspace, so the engine package carries no Hermes or Babel dependency.",
+  "type": "module",
+  "scripts": {
+    "check": "sh run.sh"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/plugin-transform-classes": "^7.25.0",
+    "esbuild": "^0.25.0",
+    "hermes-engine-cli": "0.12.0"
+  }
+}
