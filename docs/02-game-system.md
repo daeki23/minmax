@@ -122,13 +122,20 @@ A quest is a weekly or multi-week goal with:
 - a difficulty tier I/II/III chosen from the user's current stat and recent adherence,
 - no penalty for failure; an unfinished quest rolls over once, then is replaced.
 
-Quest templates live in `research/training-science.md` for now and will move to the core package as data.
+The quest catalogue lives in `packages/core/src/quests/templates.ts` (65 templates across all eight regions, version `QUEST_TEMPLATES_VERSION`), transcribed from the quest tables in `research/training-science.md`. Every template's citation key resolves through `CITATIONS` to numbered sources in a research report, so the "Why this?" sheet can show the study behind each quest. Criteria the engine can verify: sessions of a type and length, daily averages, days meeting a threshold, a measurement existing (optionally device-verified), improvement against the user's own best or against their own 4-week mean, elapsed rest days, self-report check-ins, and any combination of these ("all of").
 
 Hard rules: **[decision]**
 
-- Nutrition quests are additive by default (protein, fiber, plants, meal regularity). Restrictive quests (deficits) exist only behind an explicit goal setting with safeguards.
-- Load progression quests cap weekly volume increases and require a deload every fourth to sixth week.
+- Nutrition quests are additive by default (protein, fiber, plants, meal regularity). Restrictive quests (deficits) exist only behind an explicit goal setting with safeguards; the scheduler never assigns them.
+- **Opt-in quests are never assigned.** Alcohol-free days, creatine, sauna, heavy bone loading and hill sprints carry the `opt_in` tag; the user picks them deliberately.
+- **D-tier recommendations are never auto-scheduled** (per `research/evidence-check.md`: "Opt-in only. Never auto-suggested."). A D-tier *test* that only measures something (the 10 m sprint) may still be offered.
+- **Age gates are inclusive and need a known age.** The sit-to-stand test is offered from 40, the 60+ step target from 60, the under-60 target up to 59; with no age on file, gated templates are skipped.
+- One "load" quest per stat per week, never more. Load progression quests cap weekly volume increases and require a deload every fourth to sixth week.
+- Self-report check-ins are trust 0 by definition and complete only `self_report` criteria (warm-ups, cooking, supplements, lifting intent). Hosts cap their XP.
+- Copy follows the evidence: "easy aerobic", not "Zone 2"; "near failure", not "to failure"; C-tier text says "linked to", never "proven to"; nothing promises years of life. A test enforces this.
 - No quest ever targets a biomarker value the evidence framework classifies as "not a lifestyle target".
+
+Not yet in the catalogue because the engine cannot verify them honestly: per-muscle set logging (Forge set-volume quests), outdoor/green-space walks (needs a GPS flag), HRV-guided session swaps, and the Summit meta quests ("Tier I in five regions", "strength and intervals on separate days").
 
 ## Modes
 

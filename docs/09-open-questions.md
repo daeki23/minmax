@@ -18,6 +18,10 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 - **[research] Is Power a stat mainstream users understand**, or should it be folded into Strength for v1 and split later?
 - **[build] Character Level formula** and cap. Needs the stat model and a simulation on synthetic users so that typical new users land at levels 5–15, not 1 or 40.
 - **[build] Rift pacing.** How soon after onboarding the bottleneck should start speaking.
+- **[build] Quests the engine cannot verify yet.** Per-muscle set logging (Forge set-volume quests), a GPS "outdoor" flag for green-space walks, HRV-guided session swaps, and the Summit meta quests need new data types before they join the catalogue (`research/training-science.md`, quest tables).
+- **[research] Pre-participation screening.** Should a PAR-Q+-style screen gate Engine III, the Arena and heavy bone loading? Not researched; the regulatory report should weigh in.
+- **[research] Sedentary breaks across vendors.** Apple stand hours, Garmin move alerts and Health Connect have no common data type; `wilds.breaks.1` needs one mapping rule.
+- **[research] Older and female users in the strength dose data.** Pelland's sample was 79 % male, mean age 25; whether Tier I should be larger for 50+ users is unknown.
 
 ## Data and trust
 
@@ -57,3 +61,7 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 | How are percentiles interpolated and combined? | Linearly in z (probit) between anchors and across age-band midpoints; stats combine inputs as a weighted mean in z, never as a mean of percentiles | `packages/core/src/stats/norms.ts`, `compute.ts` |
 | Metrics without published norms (pull-ups, lifts, sprint, broad jump, shoulder) | No table; measured and shown, but they contribute nothing to the percentile until a table exists. Lifter crowd data would be a separate "community" scale | `packages/core/src/stats/model.ts` |
 | Can a claim exceed the published tail? | No; stat claims stop at the 95th percentile and metric claims must beat the measurement error | `packages/core/src/claims/issue.ts` |
+| Which quests may the scheduler assign on its own? | Only A–C tier templates that are neither opt-in nor restrictive; D-tier recommendations and opt-in quests (alcohol, creatine, sauna, bone loading, hill sprints) are the user's choice. D-tier tests may be offered | `packages/core/src/quests/schedule.ts`, `research/evidence-check.md` |
+| How does a quest with a self-reported part complete? | Through `self_report` check-ins only, trust 0, counted per quest inside its window; the host caps the XP | `packages/core/src/quests/progress.ts` |
+| Where do quest citations live? | In `CITATIONS`, keyed per template and resolved to numbered sources in the research reports; a test fails on an unknown or unused key | `packages/core/src/quests/templates.ts` |
+| Age-specific targets (steps at 60+, sit-to-stand from 40) | Separate templates with inclusive age gates; skipped when the age is unknown | `packages/core/src/quests/templates.ts` |

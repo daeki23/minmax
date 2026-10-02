@@ -2,13 +2,20 @@ import type { Measurement } from "../types/measurement.js";
 import type { Metric } from "../types/metric.js";
 import { METRIC_SPECS } from "../types/metric.js";
 import { clamp } from "../util/math.js";
-import { parseIso } from "../util/time.js";
-import type { Quest, QuestTemplate, Session } from "./types.js";
+import { addDays, DAY_MS, parseIso } from "../util/time.js";
+import type { CheckIn, Criterion, Quest, QuestTemplate, Session } from "./types.js";
 
 export interface ProgressInput {
   readonly measurements: readonly Measurement[];
   readonly sessions: readonly Session[];
+  /** Self-report check-ins; only `self_report` criteria read them. */
+  readonly checkIns?: readonly CheckIn[];
+  /** Evaluation time. Needed for criteria that count elapsed days (rest days); defaults to the window end. */
+  readonly now?: string;
 }
+
+/** A criterion that completes only when enough of the window's days actually reported data. */
+const REPORTING_COVERAGE_MIN = 0.7;
 
 function inWindow(iso: string, startIso: string, endIso: string): boolean {
   const t = parseIso(iso);
@@ -24,8 +31,11 @@ const ACCUMULATING: ReadonlySet<Metric> = new Set<Metric>([
   "steps_day",
   "active_minutes_day",
   "sedentary_break_count_day",
+  "vilpa_bouts_day",
   "fiber_g_day",
   "plant_servings_day",
+  "protein_meals_day",
+  "alcohol_drinks_day",
 ]);
 
 function dailyValues(metric: Metric, ms: readonly Measurement[], start: string, end: string): number[] {
@@ -45,12 +55,35 @@ function dailyValues(metric: Metric, ms: readonly Measurement[], start: string, 
   return out;
 }
 
+function mean(xs: readonly number[]): number {
+  return xs.reduce((a, b) => a + b, 0) / xs.length;
+}
+
+/**
+ * Partial credit for a ratio-style criterion: scales with the ratio and with how many of the window's
+ * days reported. Completes only when the target is met with enough days reporting, so two big days
+ * cannot finish a weekly average.
+ */
+function ratioProgress(ratio: number, reportingDays: number, windowDays: number): number {
+  const coverage = clamp(reportingDays / windowDays, 0, 1);
+  if (ratio >= 1 && coverage >= REPORTING_COVERAGE_MIN) return 1;
+  return clamp(Math.min(ratio, 1) * coverage, 0, 0.99);
+}
+
 /**
  * Evaluate a quest's progress (0..1) against data in its window. Pure.
  * Progress is a fraction toward the criterion so the UI can show partial completion honestly.
  */
 export function evaluateProgress(template: QuestTemplate, quest: Quest, input: ProgressInput): number {
-  const c = template.criterion;
+  return evaluateCriterion(template.criterion, template, quest, input);
+}
+
+function evaluateCriterion(
+  c: Criterion,
+  template: QuestTemplate,
+  quest: Quest,
+  input: ProgressInput,
+): number {
   const { startsAt: start, endsAt: end } = quest;
   switch (c.kind) {
     case "sessions": {
@@ -62,13 +95,9 @@ export function evaluateProgress(template: QuestTemplate, quest: Quest, input: P
     case "daily_average": {
       const days = dailyValues(c.metric, input.measurements, start, end);
       if (days.length === 0) return 0;
-      const avg = days.reduce((a, b) => a + b, 0) / days.length;
-      // Partial credit scales with the ratio and with how many days actually reported.
-      // Complete only when the target is met with at least 70 % of the window's days reporting.
-      const coverage = clamp(days.length / template.windowDays, 0, 1);
+      const avg = mean(days);
       const ratio = c.op === ">=" ? avg / c.target : c.target / Math.max(avg, 1e-9);
-      if (ratio >= 1 && coverage >= 0.7) return 1;
-      return clamp(Math.min(ratio, 1) * coverage, 0, 0.99);
+      return ratioProgress(ratio, days.length, template.windowDays);
     }
     case "days_meeting": {
       const days = dailyValues(c.metric, input.measurements, start, end);
@@ -97,6 +126,40 @@ export function evaluateProgress(template: QuestTemplate, quest: Quest, input: P
       const best = higher ? Math.max(...during) : Math.min(...during);
       const gain = higher ? best - base : base - best;
       return clamp(gain / c.delta, 0, 1);
+    }
+    case "improve_mean": {
+      // Baseline needs real data too: at least a quarter of the baseline days must have reported.
+      const baselineDays = dailyValues(c.metric, input.measurements, addDays(start, -c.baselineDays), start);
+      if (baselineDays.length < Math.ceil(c.baselineDays / 4)) return 0;
+      const days = dailyValues(c.metric, input.measurements, start, end);
+      if (days.length === 0) return 0;
+      const higher = METRIC_SPECS[c.metric].direction !== "lower";
+      const gain = higher ? mean(days) - mean(baselineDays) : mean(baselineDays) - mean(days);
+      return ratioProgress(gain / c.delta, days.length, template.windowDays);
+    }
+    case "self_report": {
+      const n = (input.checkIns ?? []).filter(
+        (k) => k.questId === quest.id && inWindow(k.at, start, end),
+      ).length;
+      return clamp(n / c.count, 0, 1);
+    }
+    case "rest_days": {
+      // Only days that have fully elapsed can count as rest days; the future is not a rest day yet.
+      const now = parseIso(input.now ?? end);
+      const busy = new Set(
+        input.sessions.filter((s) => inWindow(s.startedAt, start, end)).map((s) => s.startedAt.slice(0, 10)),
+      );
+      let rest = 0;
+      for (let t = parseIso(start); t + DAY_MS <= Math.min(parseIso(end), now); t += DAY_MS) {
+        if (!busy.has(new Date(t).toISOString().slice(0, 10))) rest++;
+      }
+      return clamp(rest / c.days, 0, 1);
+    }
+    case "all_of": {
+      if (c.parts.length === 0) return 0;
+      const parts = c.parts.map((p) => evaluateCriterion(p, template, quest, input));
+      if (parts.every((p) => p >= 1)) return 1;
+      return clamp(mean(parts), 0, 0.99);
     }
   }
 }

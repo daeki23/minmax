@@ -49,6 +49,7 @@ const quests = scheduleWeek({
   bottleneck: character.bottleneck,
   build: character.build,
   stats: character.stats,
+  age: PROFILE.age,
   recentlyCompleted: [],
   carryOver: [],
   lastWeekAdherence: null,

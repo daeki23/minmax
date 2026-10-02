@@ -1,4 +1,5 @@
 import type { Build, RegionId } from "../types/character.js";
+import { REGION_FOR_STAT } from "../types/character.js";
 import type { StatId, StatValue } from "../types/stat.js";
 import { isMeasured, statMidpoint } from "../types/stat.js";
 import { addDays } from "../util/time.js";
@@ -12,6 +13,8 @@ export interface ScheduleContext {
   readonly bottleneck: StatId | null;
   readonly build: Build;
   readonly stats: Readonly<Record<StatId, StatValue>>;
+  /** Age in years; age-gated templates are skipped when unknown. */
+  readonly age?: number;
   /** Templates completed in the last N weeks, to avoid repeats and to step difficulty. */
   readonly recentlyCompleted: readonly string[];
   /** Active quests from last week that were not completed and have not rolled over yet. */
@@ -34,11 +37,31 @@ export function pickDifficulty(stat: StatValue, lastWeekAdherence: number | null
   return d;
 }
 
+/** Age gates are inclusive; a gated template needs a known age. */
+export function ageAllows(t: QuestTemplate, age: number | undefined): boolean {
+  if (t.minAge === undefined && t.maxAge === undefined) return true;
+  if (age === undefined) return false;
+  return (t.minAge === undefined || age >= t.minAge) && (t.maxAge === undefined || age <= t.maxAge);
+}
+
+/**
+ * What the scheduler may assign on its own. Everything else the user has to pick deliberately:
+ * restrictive nutrition, opt-in quests (alcohol, supplements, sauna, heavy bone loading) and D-tier
+ * recommendations (research/evidence-check.md: "Opt-in only. Never auto-suggested."). A D-tier
+ * *test* only measures, so it stays schedulable.
+ */
+export function autoSchedulable(t: QuestTemplate): boolean {
+  if (t.tags.includes("restrictive_nutrition") || t.tags.includes("opt_in")) return false;
+  if (t.evidence === "D" && !t.tags.includes("test") && !t.tags.includes("import")) return false;
+  return true;
+}
+
 /**
  * Weekly quest selection. Rules (docs/02-game-system.md "Quests"):
  * - Default 3 quests. Unfinished quests roll over once, then are replaced.
  * - At least one quest from the home region; one Rift quest from the bottleneck's region if different and unlocked.
- * - Never two "load" quests from the same stat in a week; nothing tagged restrictive_nutrition is ever auto-scheduled.
+ * - Never two "load" quests from the same stat in a week; only autoSchedulable templates are assigned;
+ *   age-gated templates need a matching known age.
  * - Prefer templates not completed recently; prefer "test"/"import" quests for unmeasured stats so the sheet fills in.
  */
 export function scheduleWeek(ctx: ScheduleContext): Quest[] {
@@ -71,7 +94,8 @@ export function scheduleWeek(ctx: ScheduleContext): Quest[] {
   const eligible = ctx.templates.filter(
     (t) =>
       ctx.unlocked.includes(t.region) &&
-      !t.tags.includes("restrictive_nutrition") &&
+      autoSchedulable(t) &&
+      ageAllows(t, ctx.age) &&
       !usedTemplates.has(t.id),
   );
 
@@ -117,15 +141,15 @@ export function scheduleWeek(ctx: ScheduleContext): Quest[] {
   if (!out.some((q) => ctx.templates.find((t) => t.id === q.templateId)?.region === ctx.homeRegion)) {
     add(pick(eligible.filter((t) => t.region === ctx.homeRegion)));
   }
-  // 3. One Rift quest from the bottleneck's region if different.
+  // 3. One Rift quest from the bottleneck's own region if different and unlocked.
   if (ctx.bottleneck) {
-    const riftRegion = eligible.find((t) => t.stat === ctx.bottleneck)?.region;
+    const riftRegion = REGION_FOR_STAT[ctx.bottleneck];
     if (
-      riftRegion &&
       riftRegion !== ctx.homeRegion &&
+      ctx.unlocked.includes(riftRegion) &&
       !out.some((q) => ctx.templates.find((t) => t.id === q.templateId)?.stat === ctx.bottleneck)
     ) {
-      add(pick(eligible.filter((t) => t.stat === ctx.bottleneck)));
+      add(pick(eligible.filter((t) => t.stat === ctx.bottleneck && t.region === riftRegion)));
     }
   }
   // 4. Fill by score.

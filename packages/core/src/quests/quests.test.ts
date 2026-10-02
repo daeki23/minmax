@@ -6,9 +6,16 @@ import type { StatId, StatValue } from "../types/stat.js";
 import { STATS } from "../types/stat.js";
 import { startOfIsoWeek } from "../util/time.js";
 import { applyProgress, evaluateProgress } from "./progress.js";
-import { closeWeek, pickDifficulty, scheduleWeek } from "./schedule.js";
-import { QUEST_TEMPLATES, templateById } from "./templates.js";
-import type { Quest, QuestTemplate, Session } from "./types.js";
+import { ageAllows, autoSchedulable, closeWeek, pickDifficulty, scheduleWeek } from "./schedule.js";
+import {
+  CITATIONS,
+  citationFor,
+  QUEST_TEMPLATES,
+  QUEST_TEMPLATES_VERSION,
+  templateById,
+} from "./templates.js";
+import type { CheckIn, Quest, QuestTemplate, Session } from "./types.js";
+import { SESSION_TYPES } from "./types.js";
 
 const weekStart = startOfIsoWeek(NOW);
 const ids = (seed: string) => `q_${seed.replace(/[^a-z0-9]/gi, "_").slice(0, 60)}`;
@@ -62,6 +69,7 @@ function baseCtx(over: Partial<Parameters<typeof scheduleWeek>[0]> = {}) {
     bottleneck: "aerobic" as StatId,
     build,
     stats: sheet({ strength: 65, aerobic: 35, movement: 60, recovery: 55 }),
+    age: 32,
     recentlyCompleted: [],
     carryOver: [],
     lastWeekAdherence: null,
@@ -72,14 +80,76 @@ function baseCtx(over: Partial<Parameters<typeof scheduleWeek>[0]> = {}) {
 }
 
 describe("templates", () => {
-  it("every template carries an evidence tier, a citation and a verifiable criterion; none is restrictive", () => {
+  it("every template carries an evidence tier, a resolvable citation and a verifiable criterion; none is restrictive", () => {
+    expect(QUEST_TEMPLATES_VERSION).toMatch(/^\d{4}\.\d{2}\.\d{2}$/);
     for (const t of QUEST_TEMPLATES) {
       expect(["A", "B", "C", "D"]).toContain(t.evidence);
-      expect(t.citation.length).toBeGreaterThan(3);
+      expect(citationFor(t), t.id).toBeDefined();
       expect(t.tags).not.toContain("restrictive_nutrition");
       expect(t.windowDays).toBeGreaterThan(0);
+      expect([1, 2, 3]).toContain(t.difficulty);
+      if (t.minAge !== undefined && t.maxAge !== undefined) expect(t.minAge).toBeLessThanOrEqual(t.maxAge);
     }
     expect(new Set(QUEST_TEMPLATES.map((t) => t.id)).size).toBe(QUEST_TEMPLATES.length);
+    // Every citation key is used by at least one template; no orphans.
+    const used = new Set(QUEST_TEMPLATES.map((t) => t.citation));
+    for (const key of Object.keys(CITATIONS)) expect(used.has(key), key).toBe(true);
+  });
+
+  it("covers every region with at least one tier-I quest and gives every region a test or import quest", () => {
+    for (const region of [
+      "wilds",
+      "forge",
+      "engine",
+      "arena",
+      "temple",
+      "garden",
+      "sanctum",
+      "summit",
+    ] as const) {
+      const inRegion = QUEST_TEMPLATES.filter((t) => t.region === region);
+      expect(
+        inRegion.some((t) => t.difficulty === 1 && autoSchedulable(t)),
+        region,
+      ).toBe(true);
+      expect(
+        inRegion.some((t) => t.tags.includes("test") || t.tags.includes("import")),
+        region,
+      ).toBe(true);
+    }
+  });
+
+  it("keeps opt-in and D-tier recommendations out of auto-scheduling, but lets D-tier tests through", () => {
+    for (const t of QUEST_TEMPLATES) {
+      if (t.tags.includes("opt_in")) expect(autoSchedulable(t), t.id).toBe(false);
+      if (t.evidence === "D" && !t.tags.includes("test")) expect(autoSchedulable(t), t.id).toBe(false);
+    }
+    expect(autoSchedulable(templateById("arena.test.sprint") as QuestTemplate)).toBe(true);
+    expect(autoSchedulable(templateById("garden.alcohol.1") as QuestTemplate)).toBe(false);
+    expect(autoSchedulable(templateById("sanctum.rest.1") as QuestTemplate)).toBe(false);
+  });
+
+  it("follows the copy rules: no 'Zone 2', no 'to failure', no lifespan promises", () => {
+    for (const t of QUEST_TEMPLATES) {
+      const text = `${t.title} ${t.why}`;
+      expect(text, t.id).not.toMatch(/zone 2|zone two/i);
+      expect(text, t.id).not.toMatch(/\bto failure\b/i);
+      expect(text, t.id).not.toMatch(/years? of life|live longer|add years/i);
+      if (t.evidence === "C") expect(text, t.id).not.toMatch(/\bproven\b|\bproves\b/i);
+    }
+  });
+
+  it("age gates", () => {
+    const sts = templateById("forge.test.sts") as QuestTemplate;
+    expect(ageAllows(sts, 45)).toBe(true);
+    expect(ageAllows(sts, 32)).toBe(false);
+    expect(ageAllows(sts, undefined)).toBe(false);
+    const young = templateById("wilds.steps.2") as QuestTemplate;
+    const older = templateById("wilds.steps.2.60plus") as QuestTemplate;
+    expect(ageAllows(young, 59)).toBe(true);
+    expect(ageAllows(young, 60)).toBe(false);
+    expect(ageAllows(older, 60)).toBe(true);
+    expect(ageAllows(templateById("forge.sessions.1") as QuestTemplate, undefined)).toBe(true);
   });
 });
 
@@ -115,6 +185,42 @@ describe("scheduleWeek", () => {
   it("only uses unlocked regions", () => {
     const qs = scheduleWeek(baseCtx({ unlocked: ["wilds"], homeRegion: "wilds", bottleneck: null }));
     for (const q of qs) expect(templateById(q.templateId)?.region).toBe("wilds");
+  });
+
+  it("never assigns opt-in quests or quests gated to another age", () => {
+    const all = scheduleWeek(
+      baseCtx({
+        unlocked: ["wilds", "forge", "engine", "arena", "temple", "garden", "sanctum", "summit"],
+        questsPerWeek: 40,
+      }),
+    );
+    for (const q of all) {
+      const t = templateById(q.templateId) as QuestTemplate;
+      expect(t.tags, t.id).not.toContain("opt_in");
+      expect(ageAllows(t, 32), t.id).toBe(true);
+    }
+    expect(all.map((q) => q.templateId)).not.toContain("wilds.steps.2.60plus");
+    const senior = scheduleWeek(
+      baseCtx({ age: 66, unlocked: ["wilds"], homeRegion: "wilds", bottleneck: null, questsPerWeek: 40 }),
+    );
+    const ids = senior.map((q) => q.templateId);
+    expect(ids).toContain("wilds.steps.2.60plus");
+    expect(ids).not.toContain("wilds.steps.2");
+    const { age: _known, ...withoutAge } = baseCtx({
+      unlocked: ["forge"],
+      bottleneck: null,
+      questsPerWeek: 40,
+    });
+    const unknownAge = scheduleWeek(withoutAge);
+    expect(unknownAge.map((q) => q.templateId)).not.toContain("forge.test.sts");
+  });
+
+  it("picks the Rift quest from the bottleneck's own region", () => {
+    const qs = scheduleWeek(baseCtx({ bottleneck: "recovery" }));
+    const rift = qs
+      .map((q) => templateById(q.templateId) as QuestTemplate)
+      .find((t) => t.stat === "recovery");
+    expect(rift?.region).toBe("sanctum");
   });
 
   it("prefers test quests for unmeasured stats", () => {
@@ -212,5 +318,104 @@ describe("evaluateProgress", () => {
       sessions: [],
     });
     expect(p).toBeCloseTo(3 / 5, 6);
+  });
+
+  const at = (d: number, hours = 1) =>
+    new Date(Date.parse(weekStart) + d * 86_400_000 + hours * 3_600_000).toISOString();
+
+  it("self_report counts check-ins for this quest only, inside the window", () => {
+    const warmup = templateById("temple.warmup.1") as QuestTemplate;
+    const q: Quest = { ...quest, templateId: warmup.id };
+    const checkIn = (id: string, questId: string, d: number): CheckIn => ({
+      id,
+      userId: USER,
+      questId,
+      at: at(d),
+    });
+    const checkIns = [
+      checkIn("c1", q.id, 0),
+      checkIn("c2", q.id, 2),
+      checkIn("c3", "other", 3),
+      checkIn("c4", q.id, 9),
+    ];
+    expect(evaluateProgress(warmup, q, { measurements: [], sessions: [], checkIns })).toBeCloseTo(2 / 3, 6);
+    expect(evaluateProgress(warmup, q, { measurements: [], sessions: [] })).toBe(0);
+  });
+
+  it("improve_mean compares the window's daily mean with the baseline weeks before it", () => {
+    const up = templateById("wilds.steps.up") as QuestTemplate;
+    const q: Quest = { ...quest, templateId: up.id };
+    const day = (d: number, v: number) => ({ ...m("steps_day", v, { source: "garmin" }), measuredAt: at(d) });
+    const baseline = Array.from({ length: 28 }, (_, i) => day(-28 + i, 6000));
+    const thisWeek = [0, 1, 2, 3, 4, 5].map((d) => day(d, 7100));
+    expect(evaluateProgress(up, q, { measurements: [...baseline, ...thisWeek], sessions: [] })).toBe(1);
+    // Half the gain → partial credit; no baseline → nothing to compare against.
+    const half = [0, 1, 2, 3, 4, 5].map((d) => day(d, 6500));
+    const p = evaluateProgress(up, q, { measurements: [...baseline, ...half], sessions: [] });
+    expect(p).toBeGreaterThan(0.3);
+    expect(p).toBeLessThan(1);
+    expect(evaluateProgress(up, q, { measurements: thisWeek, sessions: [] })).toBe(0);
+  });
+
+  it("all_of completes only when every part does and reports the mean meanwhile", () => {
+    const pyramid = templateById("engine.pyramid.1") as QuestTemplate;
+    const q: Quest = { ...quest, templateId: pyramid.id };
+    const s = (type: Session["type"], d: number, minutes = 40): Session => ({
+      id: `s_${type}_${d}`,
+      userId: USER,
+      type,
+      startedAt: at(d),
+      minutes,
+      trustLevel: 2,
+      source: "garmin",
+    });
+    const easyOnly = [s("zone2", 0), s("zone2", 2)];
+    expect(evaluateProgress(pyramid, q, { measurements: [], sessions: easyOnly })).toBeCloseTo(0.5, 6);
+    expect(
+      evaluateProgress(pyramid, q, { measurements: [], sessions: [...easyOnly, s("intervals", 4)] }),
+    ).toBe(1);
+    // Plyometric sessions are a real session type now (Arena).
+    expect(SESSION_TYPES).toContain("plyometric");
+    const plyo = templateById("arena.plyo.1") as QuestTemplate;
+    expect(
+      evaluateProgress(
+        plyo,
+        { ...q, templateId: plyo.id },
+        { measurements: [], sessions: [s("plyometric", 1, 12)] },
+      ),
+    ).toBe(0.5);
+  });
+
+  it("rest_days counts only elapsed days without any session", () => {
+    const rest = templateById("sanctum.rest.1") as QuestTemplate;
+    const q: Quest = { ...quest, templateId: rest.id };
+    const s = (d: number): Session => ({
+      id: `s${d}`,
+      userId: USER,
+      type: "walk",
+      startedAt: at(d, 9),
+      minutes: 30,
+      trustLevel: 2,
+      source: "garmin",
+    });
+    // Evaluated on day 2 (two days elapsed) with sessions on both → no rest yet.
+    expect(evaluateProgress(rest, q, { measurements: [], sessions: [s(0), s(1)], now: at(2, 0) })).toBe(0);
+    // Day 3 elapsed and free → one rest day.
+    expect(evaluateProgress(rest, q, { measurements: [], sessions: [s(0), s(1)], now: at(3, 0) })).toBe(1);
+    // Without `now` the whole window counts (end-of-week evaluation).
+    expect(evaluateProgress(rest, q, { measurements: [], sessions: [0, 1, 2, 3, 4, 5, 6].map(s) })).toBe(0);
+  });
+
+  it("device-verified tests ignore self-reported values when minTrust is set", () => {
+    const vo2 = templateById("engine.test.vo2") as QuestTemplate;
+    const q: Quest = { ...quest, templateId: vo2.id };
+    const selfReported = {
+      ...m("vo2max", 45, { source: "self" }),
+      measuredAt: at(1),
+      trustLevel: 0 as const,
+    };
+    const device = { ...m("vo2max", 45, { source: "garmin" }), measuredAt: at(1), trustLevel: 2 as const };
+    expect(evaluateProgress(vo2, q, { measurements: [selfReported], sessions: [] })).toBe(0);
+    expect(evaluateProgress(vo2, q, { measurements: [device], sessions: [] })).toBe(1);
   });
 });

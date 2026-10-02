@@ -64,7 +64,8 @@ Steps 2 to 6 run on the device after every ingest batch and at least once a day 
 | Current time | `now: string` (ISO) on every call | Makes replay and tests trivial |
 | Id generation | `idFactory(seed) => string` | Seeds are stable per user, week and template so retries do not duplicate quests |
 | Norm tables | `NormRegistry` | Bundled JSON, versioned; `StaticNormRegistry` with pooled fallback |
-| Quest templates | `QuestTemplate[]` | Bundled JSON with evidence tier and citation; the engine refuses templates tagged `restrictive_nutrition` for auto-scheduling |
+| Quest templates | `QuestTemplate[]` | Bundled, versioned (`QUEST_TEMPLATES_VERSION`), each with evidence tier and a citation key resolved by `CITATIONS`; `autoSchedulable` refuses `restrictive_nutrition`, `opt_in` and D-tier recommendations (tests excepted), `ageAllows` enforces age gates |
+| Self-report check-ins | `CheckIn[]` in `ProgressInput` | The only way a `self_report` criterion advances; always trust 0, XP capped by the host |
 | Signing | `Signer` / `Verifier` over a canonical JSON string | Server-side Ed25519 in Phase 0 |
 | Persisted state | `Origin`, `BottleneckState`, earned regions, journey XP, build name, carry-over quests | Returned by the engine, stored by the host, fed back next run |
 

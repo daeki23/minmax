@@ -29,14 +29,20 @@ export const METRICS = [
   "steps_day",
   "active_minutes_day",
   "sedentary_break_count_day",
+  "vilpa_bouts_day", // vigorous bursts of ≥1 min in daily life (stairs, uphill walk)
+  // per-session training markers (one measurement per workout, dated by the workout)
+  "hr_time_above_85pct", // minutes of a session with HR ≥ 85 % of max; verifies interval quality
   // recovery
   "sleep_duration_h",
   "sleep_regularity_index", // 0-100
   "sleep_efficiency_pct",
+  "wake_deviation_min", // |wake time − target wake time| in minutes; lower is better
   // nutrition / metabolic
   "protein_g_per_kg_day",
+  "protein_meals_day", // meals that day with ≥ 0.4 g/kg protein
   "fiber_g_day",
   "plant_servings_day",
+  "alcohol_drinks_day", // standard drinks; 0 is the target
   "body_fat_pct", // lower-is-better within healthy range, handled by table shape
   "waist_to_height",
   "bodyweight_kg", // not a stat input; used for ratios and claims
@@ -128,6 +134,8 @@ export const METRIC_SPECS: Readonly<Record<Metric, MetricSpec>> = {
     min: 0,
     max: 100,
   },
+  vilpa_bouts_day: { unit: "bouts", direction: "higher", freshnessDays: 1, tolerance: 1, min: 0, max: 50 },
+  hr_time_above_85pct: { unit: "min", direction: "higher", freshnessDays: 7, tolerance: 2, min: 0, max: 180 },
 
   sleep_duration_h: { unit: "h", direction: "none", freshnessDays: 1, tolerance: 0.5, min: 0, max: 16 },
   sleep_regularity_index: {
@@ -139,8 +147,10 @@ export const METRIC_SPECS: Readonly<Record<Metric, MetricSpec>> = {
     max: 100,
   },
   sleep_efficiency_pct: { unit: "%", direction: "higher", freshnessDays: 7, tolerance: 4, min: 30, max: 100 },
+  wake_deviation_min: { unit: "min", direction: "lower", freshnessDays: 1, tolerance: 10, min: 0, max: 720 },
 
   protein_g_per_kg_day: { unit: "g/kg", direction: "none", freshnessDays: 7, tolerance: 0.2, min: 0, max: 5 },
+  protein_meals_day: { unit: "meals", direction: "higher", freshnessDays: 7, tolerance: 1, min: 0, max: 10 },
   fiber_g_day: { unit: "g", direction: "higher", freshnessDays: 7, tolerance: 4, min: 0, max: 120 },
   plant_servings_day: {
     unit: "servings",
@@ -150,6 +160,7 @@ export const METRIC_SPECS: Readonly<Record<Metric, MetricSpec>> = {
     min: 0,
     max: 30,
   },
+  alcohol_drinks_day: { unit: "drinks", direction: "lower", freshnessDays: 1, tolerance: 1, min: 0, max: 40 },
   body_fat_pct: { unit: "%", direction: "none", freshnessDays: 60, tolerance: 2.5, min: 2, max: 70 },
   waist_to_height: {
     unit: "ratio",

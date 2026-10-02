@@ -14,8 +14,9 @@ export type EvidenceTier = "A" | "B" | "C" | "D";
 export type Difficulty = 1 | 2 | 3;
 
 /**
- * Completion criteria are evaluated against measurements in the quest window.
- * Each is verifiable by data; a quest never completes by tapping "done" alone unless it is a self-report quest.
+ * Completion criteria are evaluated against measurements, sessions and check-ins in the quest window.
+ * Each is verifiable by data; only `self_report` completes by the user saying so, and it carries the
+ * lowest trust (hosts cap its XP accordingly).
  */
 export type Criterion =
   | {
@@ -51,6 +52,31 @@ export type Criterion =
       readonly kind: "improve";
       readonly metric: Metric;
       readonly delta: number;
+    }
+  | {
+      /**
+       * The window's daily mean improved by at least delta vs. the daily mean of the `baselineDays`
+       * before the window (e.g. +1,000 steps a day vs. the last four weeks).
+       */
+      readonly kind: "improve_mean";
+      readonly metric: Metric;
+      readonly delta: number;
+      readonly baselineDays: number;
+    }
+  | {
+      /** The user confirmed the behaviour N times (check-ins). Trust 0 by definition. */
+      readonly kind: "self_report";
+      readonly count: number;
+    }
+  | {
+      /** At least N calendar days in the window (already elapsed) with no session of any kind. */
+      readonly kind: "rest_days";
+      readonly days: number;
+    }
+  | {
+      /** Every part must be met; progress is the mean of the parts and completes only when all do. */
+      readonly kind: "all_of";
+      readonly parts: readonly Criterion[];
     };
 
 export const SESSION_TYPES = [
@@ -58,6 +84,7 @@ export const SESSION_TYPES = [
   "zone2",
   "intervals",
   "sprint",
+  "plyometric",
   "mobility",
   "walk",
   "balance",
@@ -76,9 +103,35 @@ export interface Session {
   readonly source: string;
 }
 
+/** A self-report check-in against one quest ("I did the warm-up today"). Always trust 0. */
+export interface CheckIn {
+  readonly id: string;
+  readonly userId: string;
+  readonly questId: string;
+  readonly at: string;
+  readonly note?: string;
+}
+
+export const QUEST_TAGS = [
+  /** Prescribes training load; the scheduler allows one per stat per week. */
+  "load",
+  "additive_nutrition",
+  /** Deficits and restriction. Never auto-scheduled; only behind an explicit goal with safeguards. */
+  "restrictive_nutrition",
+  /** Take a test or measurement; preferred for unmeasured stats. */
+  "test",
+  /** Connect or import a data source. */
+  "import",
+  "recovery",
+  /** Alcohol, supplements, sauna, heavy bone loading: the user picks these; never assigned by default. */
+  "opt_in",
+] as const;
+export type QuestTag = (typeof QUEST_TAGS)[number];
+
 export interface QuestTemplate {
   readonly id: string;
   readonly region: RegionId;
+  /** Primary stat; hybrid (Summit) quests name the stat they load most. */
   readonly stat: StatId;
   readonly difficulty: Difficulty;
   readonly evidence: EvidenceTier;
@@ -90,17 +143,13 @@ export interface QuestTemplate {
   readonly criterion: Criterion;
   /** Window length in days; 7 for weekly quests. */
   readonly windowDays: number;
-  /** Citation key into docs/research/training-science.md. */
+  /** Citation key; resolved through CITATIONS in templates.ts to docs/research sources. */
   readonly citation: string;
   /** Safety rails: tags the scheduler respects (e.g. no two "load" quests in one week). */
-  readonly tags: readonly (
-    | "load"
-    | "additive_nutrition"
-    | "restrictive_nutrition"
-    | "test"
-    | "import"
-    | "recovery"
-  )[];
+  readonly tags: readonly QuestTag[];
+  /** Age gates (inclusive). A template with a gate is never scheduled when the age is unknown. */
+  readonly minAge?: number;
+  readonly maxAge?: number;
 }
 
 export type QuestStatus = "active" | "completed" | "rolled_over" | "expired";
