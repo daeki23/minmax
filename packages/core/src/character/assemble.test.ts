@@ -101,7 +101,10 @@ describe("hrvReadiness", () => {
   });
 
   it("never mixes sources", () => {
-    const base = nights([52, 55, 50, 53, 54, 51, 56, 52, 53, 55, 54, 52], "garmin");
+    // Twelve Garmin nights from 12 to 1 days ago, then a single Oura night today.
+    const base = [52, 55, 50, 53, 54, 51, 56, 52, 53, 55, 54, 52].map((v, i) =>
+      m("hrv_rmssd", v, { source: "garmin", daysAgo: 12 - i }),
+    );
     const latestOura = m("hrv_rmssd", 70, { source: "oura", daysAgo: 0 });
     expect(hrvReadiness([...base, latestOura], NOW).kind).toBe("insufficient_baseline");
   });
