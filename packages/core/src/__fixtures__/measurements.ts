@@ -66,5 +66,9 @@ export function fitUserMeasurements(): Measurement[] {
     m("fiber_g_day", 24, { source: "self" }),
     m("plant_servings_day", 4, { source: "self" }),
     m("waist_to_height", 0.46, { source: "minmax_app" }),
+    // Twelve nights of same-source HRV so the personal baseline exists; last night slightly low.
+    ...[52, 55, 50, 53, 54, 51, 56, 52, 53, 55, 54, 46].map((v, i, all) =>
+      m("hrv_rmssd", v, { source: "garmin", daysAgo: all.length - 1 - i }),
+    ),
   ];
 }
