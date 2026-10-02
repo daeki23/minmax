@@ -129,7 +129,10 @@ export async function verifyClaim(
   verifier: Verifier,
   now: string,
 ): Promise<{ readonly valid: boolean; readonly reason?: string }> {
-  const [alg, keyId] = c.signatureAlg.split(":");
+  // "alg:keyId"; key ids may themselves contain colons, so split on the first one only.
+  const sep = c.signatureAlg.indexOf(":");
+  const alg = sep === -1 ? c.signatureAlg : c.signatureAlg.slice(0, sep);
+  const keyId = sep === -1 ? "" : c.signatureAlg.slice(sep + 1);
   if (alg !== verifier.alg || !keyId) return { valid: false, reason: "unsupported_alg" };
   const today = toDateOnly(now);
   if (today < c.validFrom || today > c.validUntil) return { valid: false, reason: "expired" };
