@@ -26,15 +26,15 @@ _Research report for MINMAX · 2026-10-02 · status: draft, independently fact-c
 | **Pikmin Bloom** (Niantic/Scopely) | F2P | $100M lifetime spend (1 Dec 2025); $34.8M in Jan–Nov 2025, already its best year; 667k installs Nov 2025 (AppMagic estimates) [27] | Walking as planting; player spending has grown every year since launch; steps only |
 | **Pokémon GO** | F2P | >$8B lifetime spend, 20M+ WAU; Scopely bought Niantic games for $3.5B (Mar 2025) [28] | Walking is a side effect, not a health product |
 | **Ring Fit Adventure** | $80 one-off | 15.38M units by Mar 2023 [19] | Exercises as RPG attacks works at scale; console-bound, "simplistic" |
-| **Zwift** | $19.99/mo or $199.99/yr (€19.99 EU); up from $14.99 in May 2024 [35][36] | 550k accounts (Jan 2018); $450M from KKR (2020) [35] | Levels, XP, drops, unlocks, "Ride Ons"; needs trainer hardware |
+| **Zwift** | $19.99/mo or $199.99/yr (€19.99 EU); up from $14.99 (announced May 2024, effective 6 Jun 2024) [35][36] | 550k accounts (Jan 2018); $450M from KKR (2020) [35] | Levels, XP, drops, unlocks, "Ride Ons"; needs trainer hardware |
 | **Strava** | $11.99/mo or $79.99/yr; Family $139.99; +Runna $149.99 (from 1 Jul 2025) [12] | "Over 150 million athletes" (Aug 2025, official) [13]; ~180–200M and ~$500M ARR in 2026 IPO coverage (unverified) [14] | Segments, kudos, 1M+ clubs, Athlete Intelligence; social graph, not a health model; payer share undisclosed (est. 3–15%) |
 | **Nike Run Club / NTC** | Free | "100M+ users" (third-party) [15] | Badges, coaching; loss-leader for shoes |
 | **Freeletics** | Coach in blocks ~$34.99/3 mo to ~$89.99/12 mo; lifetime $549.99 (third-party, unverified) [16] | "60M users" (unverified) | AI bodyweight coach; no wearable stats |
-| **Sweatcoin / STEPN / Step App** | Steps → tokens/rewards | Sweatcoin: 200M+ users claimed, ~$10M revenue, 22.5M downloads in 2025 [30]; STEPN −50% earnings 1 Jan 2026; Step App closed Aug 2026 [29] | Cheap acquisition, Ponzi-like economics, category "in structural decline" |
+| **Sweatcoin / STEPN / Step App** | Steps → tokens/rewards | Sweatcoin: 200M+ users claimed, ~$10M revenue, 22.5M downloads in 2025 (unverified; source page not fetchable) [30]; STEPN −50% earnings 1 Jan 2026; Step App closed Aug 2026 [29] | Cheap acquisition, Ponzi-like economics, category "in structural decline" |
 
 **Newer "your body as a character" apps (2023–26), the true comparables:**
 
-- **Forjum** (© 2026, TestFlight beta): Apple Watch (Series 4+) and Wear OS data → five stats: Might (strength load), Agility (speed/reaction), Vitality (VO2max/cardio load), Spirit (sleep + HRV), Presence (social). Readiness 0–100, 16+ sensor-verified minigames, async duels. On-device only, no cloud, no ads, no sign-up. Free; Supporter €1.99/mo; Premium €4.99/mo. Explicit "no fake progression" and a stated aim to make itself unnecessary within a year. No Garmin/Oura/Whoop [31][32]. (confidence: high)
+- **Forjum** (© 2026, solo developer Matteo Balderi; **live on the App Store and Google Play**, US iOS version 4.0.13, too few ratings to display): Apple Watch (Series 4+) and Wear OS data → five stats: Might (strength load), Agility (speed/reaction), Vitality (VO2max/cardio load), Spirit (sleep + HRV), Presence (social). Readiness 0–100 (50 = personal normal), 16+ sensor-verified minigames, duels/co-op. On-device processing, no ads, no sign-up (anonymous profile). Free; Supporter €1.99/mo ($1.99 US); Premium €4.99/mo ($5.99 US). Stats explicitly decay with detraining, and a "Learn & Graduate" feature aims to teach users their own signals; the earlier "no fake progression" wording and "unnecessary within a year" aim were not found on the current site or listing (unverified). No Garmin/Oura/Whoop [31][32]. (confidence: high)
 - **Fitscape** (BitLark LLC): Apple Health steps/workouts/sleep → hero, loot, quests; $3.99–7.99/mo; 4.1★ from 73 ratings; reviews cite thin content and few players; v2026.10 shipped this week [33].
 - **Level-UP: Fitness** (solo dev): manually logged workouts → dungeons and gear; 4.0★ from 177 ratings; last update Feb 2025 [34].
 
@@ -44,7 +44,7 @@ No venture-funded startup in this niche surfaced; 2025–26 fitness capital went
 
 | Product | Price | Score(s) shown | Notes |
 |---|---|---|---|
-| **Whoop** (5.0/MG, May 2025) | One $199/yr, Peak $239/yr, Life $359/yr ($25/30/40 mo); hardware included; stops tracking without membership [1][3] | Recovery, Strain, Sleep; **Healthspan = WHOOP Age + Pace of Aging** (Peak/Life), nine inputs incl. sleep hours/consistency, HR-zone time, strength-training time, steps, VO2max, RHR, lean mass [2] | 2.5M+ members, bookings +103% in 2025, $1.1B run-rate [4]. FDA warning letter 14 Jul 2025 over "medical-grade" Blood Pressure Insights, closed 2026 [5]. May 2025 upgrade-fee backlash and reversal [3] |
+| **Whoop** (5.0/MG, May 2025) | One $199/yr, Peak $239/yr, Life $359/yr ($25/30/40 mo, monthly billing for existing customers only, still 12-month commitment); hardware included; stops tracking without membership [1][3] | Recovery, Strain, Sleep; **Healthspan = WHOOP Age + Pace of Aging** (Peak/Life), nine inputs incl. sleep hours/consistency, HR-zone time, strength-training time, steps, VO2max, RHR, lean mass [2] | 2.5M+ members, bookings +103% in 2025, $1.1B run-rate [4]. FDA warning letter 14 Jul 2025 over Blood Pressure Insights marketed without clearance [5]; reported close-out in 2026 (unverified; the FDA letter page shows no close-out). May 2025 upgrade-fee backlash and reversal [3] |
 | **Oura** (Ring 4; Ring 5 listed at $399–499) | $5.99/mo or $69.99/yr [6][7] | Readiness, Sleep, Activity; Resilience, Daytime Stress, **Cardiovascular Age**, Cardio Capacity, Symptom Radar; Oura Advisor AI | FY2025 revenue $907.9M; 9-month FY2026 $1.21B (+74%); 5M paid members; DAU = 65% of MAU; IPO target >$16B [8][9] |
 | **Garmin Connect+** (Mar 2025) | $6.99/mo or $69.99/yr [10] | Body Battery, Training Readiness, VO2max and its **age/sex percentile stay free**; Connect+ adds AI "Active Intelligence", dashboards, live activity, badges [10][11] | Launch met with skepticism; Garmin: "It's your data" |
 | **Apple Fitness+ / Health** | $9.99/mo or $79.99/yr [12] | Rings, Cardio Fitness band (Low → High), **no readiness score** | Content, not scoring |
@@ -54,7 +54,7 @@ No venture-funded startup in this niche surfaced; 2025–26 fitness capital went
 | **Bevel** | $14.99/mo or $99.99/yr [14] | Recovery, Strain, Sleep, Nutrition, **Biological Age**; reads Apple Watch, Garmin, Oura, Whoop | Closest multi-wearable aggregator; "can feel like a lot" |
 | **Function Health** | $365/yr, 160+ lab tests; MRI $499 post-Ezra (May 2025) [16][17] | Clinician-reviewed results and action items; no composite score found | 100k+ members (2024); $2.5B valuation (Nov 2025); criticised for alarmist claims [17] |
 | **Superpower** | $349/yr, 150+ biomarkers [18] | **Biological age, 17 health scores, pace of aging**; syncs Apple Health, Whoop, Oura | Direct score-stack rival if MINMAX adds labs |
-| **InsideTracker** | $149/yr; InnerAge $99; Ultimate test ~$589 [19b] | "Optimized zones" per biomarker, 10 healthspan scores; "normal does not mean optimal", explicitly not percentiles | Connects Apple Health, Oura, Fitbit, Garmin |
+| **InsideTracker** | $149/yr; InnerAge $99; Ultimate test ~$589 (unverified) [19b] | "Optimized zones" per biomarker, 10 healthspan scores; "normal does not mean optimal", explicitly not percentiles | Connects Apple Health, Oura, Fitbit, Garmin |
 | **Zoe** | UK £149 kit + £9.99/mo (cut 60%); US ~$399 kit + $24.99–59.99/mo (third-party) [20b] | Food and gut scores; blood responses now algorithmic | Losses widened as price fell (unverified detail) |
 | **Lumen** | ~$199–299 device + $19/mo (third-party) [21b][22b] | Fat vs carb burn %, "Body State", one next action | Accuracy questioned by reviewers |
 
@@ -72,7 +72,7 @@ Pattern: every premium player converges on **one daily readiness number plus one
 
 **Closest three competitors**
 
-1. **Forjum**: same core idea (biometrics → honest RPG stats, privacy-first). MINMAX differs via multi-source ingestion with provenance and trust tiers, lab/nutrition stats, Origin + Class + Bottleneck world, Simple Mode, percentile/evidence labels, later verifiable claims. Risk: cheaper (€4.99) and already in beta.
+1. **Forjum**: same core idea (biometrics → honest RPG stats, privacy-first). MINMAX differs via multi-source ingestion with provenance and trust tiers, lab/nutrition stats, Origin + Class + Bottleneck world, Simple Mode, percentile/evidence labels, later verifiable claims. Risk: cheaper (€4.99 / $5.99) and already live on both app stores.
 2. **Whoop Peak ($239/yr)**: the premium "your body, scored, with longevity narrative" benchmark. MINMAX differs by hardware agnosticism, percentiles instead of "WHOOP Age", and the game surface. Risk: Healthspan already uses strength time, steps, VO2max and lean mass, the same inputs as MINMAX stats [2].
 3. **Bevel ($99.99/yr)**: multi-wearable aggregator with Biological Age. MINMAX differs via identity layer, guideline-anchored quests, provenance and two surfaces. Risk: Bevel could add an RPG skin quickly.
 
@@ -80,18 +80,18 @@ Pattern: every premium player converges on **one daily readiness number plus one
 
 | In use | What | Relevance |
 |---|---|---|
-| **MinMax Fitness** (Google Play `com.trainerize.minmaxfitness`, ABC Fitness Solutions) | White-label coaching app, Health & Fitness [40]; minmaxfitness.com did not resolve today | Identical word, same class |
+| **MinMax Fitness** (Google Play `com.trainerize.minmaxfitness`, ABC Fitness Solutions) | White-label coaching app, Health & Fitness [40]; minmaxfitness.com did not resolve today. Package name suggests it is the Trainerize-built app of the Erina business below (unverified) | Identical word, same class |
 | **Min-Max Fitness** (Erina, NSW, Australia) + **Min-Max Fitness App** (`com.mypthub.minmaxfitnessapp`) | PT business for 40+ with its own app [41][42] | Same word, same class, live |
 | **The Min-Max Program** (Jeff Nippard) | 12-week hypertrophy program from a top fitness YouTuber [43] | Strong consumer association; SEO collision |
 | **MinMax** (`co.minmax.app`, MinMax Inc.) | Video-creation app live since Oct 2024; **owns minmax.app** [44][45] | Domain gone; software overlap |
-| **MinMax Games Ltd** (BC, Canada) | Indie studio; US mark "MINMAX GAMES 1 20" filed 13 Feb 2012 for role-playing games [46][47] | Games class, RPG goods named |
-| **MINMAX** (Chen Xiaosheng, US serial 79322260 / IR 1617769) | Kitchen appliances, pending since 2021 [48] | Different class; word contested internationally |
+| **MinMax Games** (BC, Canada) | Active indie PC studio (Space Pirates and Zombies, Clanfolk) [47]. Separately, US application "MINMAX GAMES 1 20" (serial 85541143) was filed 13 Feb 2012 for role-playing games by **MinMax Games, LLC of New Jersey** and is **dead (abandoned Jan 2014)** [46] | Common-law use in games; no live US mark from this source |
+| **MINMAX** (Chen Xiaosheng, US serial 79322260 / IR 1617769) | Kitchen appliances (class 7), filed 29 Mar 2021, **registered and live** [48] | Different class, but a live registered US word mark for MINMAX |
 | **MiniMax Group** (Shanghai; HKEX 0100 since Jan 2026) | AI firm (Hailuo); sued by Disney/Universal/WBD Sep 2025 [49][50] | Phonetically identical; negative press; search pollution |
 | **MinnMax** (Minnesota) | Games media company [51] | Gamer-audience overlap |
 
 Not checkable with the tools available: EUIPO eSearch, Swissreg (IGE), DPMAregister, USPTO TESS directly, WHOIS for minmax.health / getminmax.com / minmax.fit. **Unverified**; a clearance search is required.
 
-**Risk (not legal advice): high.** Identical marks already sit in the fitness-app class; "min-maxing" is a generic gaming term, so the mark would be weak for a game-like product; the .app domain is taken; MiniMax AI owns search and voice. (confidence: high on facts, medium on legal weight)
+**Risk (not legal advice): high.** Identical names are already in use for fitness apps/services (whether any is a registered mark is unverified), and a live US MINMAX word registration exists in another class; "min-maxing" is a generic gaming term, so the mark would be weak for a game-like product; the .app domain is taken; MiniMax AI owns search and voice. (confidence: high on facts, medium on legal weight)
 
 **Alternative names (unchecked):** *Statborn*, *Kinforge*, *Vitalforge*, *Originline*, *Bottleneck* ("find your bottleneck"). Check all against EUIPO, Swissreg, USPTO, app stores and .app/.health domains in one pass.
 
@@ -99,7 +99,7 @@ Not checkable with the tools available: EUIPO eSearch, Swissreg (IGE), DPMAregis
 
 1. **Position against Whoop Peak and Bevel, not Pokémon GO.** The $70–240/yr buyer exists and buys scores; pitch "same inputs, shown honestly as percentiles with evidence tiers, wrapped in an identity you keep." Software-only at ≤ $9.99/mo or ~$69–79/yr; a higher tier for labs and verified claims.
 2. **Multi-source ingestion with provenance is the moat against Forjum/Fitscape.** Launch with Garmin + HealthKit + Health Connect and show the trust tier on every stat. Match Forjum's privacy bar (on-device or an equally clear story).
-3. **Design for the churn data.** With 3–4% day-30 retention and ~47% 90-day paid churn, week one must deliver the Origin reveal and one completed quest with zero manual logging where a device exists. Mis-counted data kills gamification trust; provenance and confidence labels are the fix competitors lack.
+3. **Design for the churn data.** With benchmark day-30 retention of ~3–4% and one case study showing ~47% 90-day paid churn, week one must deliver the Origin reveal and one completed quest with zero manual logging where a device exists. Mis-counted data kills gamification trust; provenance and confidence labels are the fix competitors lack.
 4. **No proprietary "biological age".** Credibility comes from percentile bands anchored to published norms (ACSM/Cooper VO2max, strength norms, step guidelines) and from labelling the rest "plausible / individual / experimental".
 5. **No tokens, ever.** Keep ZK verification as a trust feature (prove "VO2max ≥ 50, Garmin-derived" to a challenge or insurer), scheduled after retention is proven.
 6. **Rename before filing.** Keep MINMAX as codename; budget one clearance search.
@@ -107,7 +107,7 @@ Not checkable with the tools available: EUIPO eSearch, Swissreg (IGE), DPMAregis
 
 ## Open questions
 
-- Forjum's real traction and whether it adds Garmin/Oura; revisit after it leaves TestFlight.
+- Forjum's real traction and whether it adds Garmin/Oura; it is now public on both stores, so track ratings and download estimates.
 - Strava's and Whoop's payer counts and churn; Strava's S-1 (confidential since Feb 2026) would set the conversion benchmark.
 - Which normative datasets Garmin uses, and which exist for strength, mobility and recovery that MINMAX can cite.
 - Legal status of MINMAX in EUIPO, Swissreg, DPMA; WHOIS for minmax.health / getminmax.com.
@@ -152,7 +152,7 @@ Not checkable with the tools available: EUIPO eSearch, Swissreg (IGE), DPMAregis
 29. Step App Shuts Down After 4 Years — The Crypto Times (6 Aug 2026) — https://www.cryptotimes.io/2026/08/06/step-app-shuts-down-after-4-years-fitfi-token-collapses-to-near-zero-market-cap/ — accessed 2026-10-02; Is Move to Earn Dead in 2026? — https://bitletics.com/blog/move-to-earn-2026/ — seen in search
 30. Sweatcoin Revenue and Usage Statistics (2026) — Business of Apps — https://www.businessofapps.com/data/sweatcoin-statistics/ — seen in search 2026-10-02 (fetch returned 403)
 31. Forjum — Fitness RPG for Apple Watch & Wear OS — https://www.forjum.com/ — accessed 2026-10-02
-32. Join the Forjum beta — TestFlight — https://testflight.apple.com/join/P6WBKV2J — seen in search 2026-10-02
+32. Forjum Fitness RPG — App Store — https://apps.apple.com/us/app/forjum-fitness-rpg-tracker/id6757127810 — accessed 2026-10-02 (replaces an earlier TestFlight beta link; the app is now publicly listed)
 33. Fitscape – Fitness RPG Quests — App Store — https://apps.apple.com/us/app/fitscape-fitness-rpg-quests/id1602746868 — accessed 2026-10-02
 34. Level-UP: Fitness — App Store — https://apps.apple.com/us/app/level-up-fitness/id6499099763 — accessed 2026-10-02
 35. Zwift — Wikipedia — https://en.wikipedia.org/wiki/Zwift — accessed 2026-10-02
@@ -166,9 +166,40 @@ Not checkable with the tools available: EUIPO eSearch, Swissreg (IGE), DPMAregis
 43. The Min-Max Program — Jeff Nippard — https://jeffnippard.com/products/the-min-max-program — accessed 2026-10-02
 44. MinMax — Google Play (`co.minmax.app`) — https://play.google.com/store/apps/details?id=co.minmax.app&hl=en_US — seen in search 2026-10-02
 45. MinMax for Android — AppBrain — https://www.appbrain.com/app/minmax/co.minmax.app — seen in search 2026-10-02 (fetch returned 403)
-46. MINMAX GAMES 1 20 — Justia Trademarks (serial 85541143) — https://trademarks.justia.com/855/41/minmax-games-1-85541143.html — seen in search 2026-10-02 (fetch returned 403)
+46. MINMAX GAMES 1 20 — USPTO TSDR (serial 85541143) — https://tsdr.uspto.gov/statusview/sn85541143 — accessed 2026-10-02 (status: dead/abandoned; owner MinMax Games, LLC, Bloomingdale NJ)
 47. MinMax Games — https://www.minmax-games.com/ — seen in search 2026-10-02
-48. MINMAX — Justia Trademarks (serial 79322260, Chen Xiaosheng) — https://trademarks.justia.com/793/22/minmax-79322260.html — seen in search 2026-10-02 (fetch returned 403)
+48. MINMAX — USPTO TSDR (serial 79322260, Chen Xiaosheng) — https://tsdr.uspto.gov/statusview/sn79322260 — accessed 2026-10-02 (status: live/registered)
 49. MiniMax Group — Wikipedia — https://en.wikipedia.org/wiki/MiniMax_Group — accessed 2026-10-02
 50. Disney, WBD, NBCU sue MiniMax — Variety — https://variety.com/2025/digital/news/disney-warner-bros-discovery-nbcu-lawsuit-minimax-chinese-ai-company-1236520395/ — seen in search 2026-10-02
 51. MinnMax — Wikipedia — https://en.wikipedia.org/wiki/MinnMax — accessed 2026-10-02
+
+## Verification notes (2026-10-02)
+
+Independent check by WebFetch of cited and alternative primary pages (web search quota was exhausted, so second sources were limited to directly fetchable pages).
+
+1. **Whoop Series G: $575M, $10.1B, 2.5M+ members, $1.1B run-rate, bookings +103%** — verified (Crunchbase News dated 31 Mar 2026; Wikipedia gives April 2026 for the round). https://news.crunchbase.com/venture/wearable-fitness-tech-ai-whoop-seriesg-funding/ ; https://en.wikipedia.org/wiki/Whoop_(company)
+2. **Whoop tiers $199/$239/$359** — verified; caveat added that monthly billing is for existing customers only with a 12-month commitment. https://trackervs.com/pricing/whoop-pricing/ (official page still 403; third-party only)
+3. **Whoop Healthspan nine inputs on Peak/Life** — verified. https://gadgetsandwearables.com/2025/05/09/whoop-age-pace-of-ageing/
+4. **FDA warning letter 14 Jul 2025, "closed 2026"** — letter date and subject verified; "closed 2026" **unverified** (no close-out on the FDA page) and "medical-grade" wording replaced. https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/whoop-inc-709755-07142025
+5. **Oura FY2025 $907.9M, 9-month $1.21B (+74%), 5M paid members, DAU 65% of MAU, >$16B IPO** — verified against the cited Yahoo article (4 Sep 2026); $900M at $11B (Oct 2025) and confidential IPO filing (May 2026) verified via Wikipedia. https://en.wikipedia.org/wiki/Oura_Health
+6. **Oura membership $5.99/mo or $69.99/yr; Ring 5 $399–499** — verified on official pages. https://ouraring.com/membership ; https://ouraring.com/store/rings/oura-ring-5
+7. **Garmin Connect+ $6.99/mo or $69.99/yr, launched Mar 2025 (27 Mar)** — verified; VO2max age/sex percentile in Connect verified on Garmin's blog. https://www.garmin.com/en-US/blog/fitness/whats-a-good-vo2-max-for-me/
+8. **Strava $11.99/$79.99, Family $139.99, +Runna $149.99 from 1 Jul 2025; 150M+ athletes (26 Aug 2025)** — verified on official pages. https://www.strava.com/pricing ; https://press.strava.com/articles/strava-mid-year-data-shows-how-athletes-are-tracking-toward-2025-goals
+9. **Apple Fitness+ $9.99/$79.99** — verified. https://www.apple.com/apple-fitness-plus/
+10. **Zwift $19.99/$199.99, up from $14.99 in May 2024** — corrected: announced May 2024, effective 6 Jun 2024. https://mountainmassif.com/news/zwift/zwifts-subscription-price-increase/ ; https://en.wikipedia.org/wiki/Zwift
+11. **Ring Fit Adventure 15.38M units by Mar 2023** — verified on Wikipedia; no newer Nintendo figure found (Nintendo's current IR page lists Switch 2 titles only). https://en.wikipedia.org/wiki/Ring_Fit_Adventure
+12. **Pikmin Bloom $100M lifetime, $34.8M in 2025** — corrected: $34.8M covers Jan–Nov 2025 (AppMagic estimates); "only Niantic title growing every year" replaced with what the source says (spending grew every year). https://www.pocketgamer.biz/pikmin-bloom-hits-100m-after-four-years-as-2025-becomes-its-best-year-yet/
+13. **Scopely–Niantic $3.5B (12 Mar 2025); Pokémon GO >$8B, 20M+ WAU** — verified. https://gameworldobserver.com/2025/03/12/scopely-niantic-game-business-3-5-billion-acquisition ; https://en.wikipedia.org/wiki/Pok%C3%A9mon_Go
+14. **Habitica moderators left Dec 2022, Tavern/guilds removed 8 Aug 2023; $4.99/$47.99** — verified. https://en.wikipedia.org/wiki/Habitica ; https://www.mainquest.net/habitica-pricing
+15. **Zombies, Run! OliveX $9.5M (Mar 2021), Alderman reacquisition** — verified; date still conflicts (Nov 2025 per Motera vs "2026" per Wikipedia), left open. https://en.wikipedia.org/wiki/Zombies,_Run!
+16. **STEPN GMT −50% on 1 Jan 2026; Step App shutdown Aug 2026, FITFI −99.99%** — verified (services shut after 21 Aug 2026 unstake deadline). Sweatcoin ~$10M revenue remains **unverified** (Business of Apps 403). https://bitletics.com/blog/move-to-earn-2026/ ; https://www.cryptotimes.io/2026/08/06/step-app-shuts-down-after-4-years-fitfi-token-collapses-to-near-zero-market-cap/
+17. **Fitness-app churn: 3–4% day-30, ~47% 90-day paid churn** — corrected/softened: the cited Sahha post sources 3–4% to vendor blogs (Lucid 2025, Snoopr 2026) and 46.8% to a single B2C case study (Statssy 2025); no peer-reviewed source checked. https://sahha.ai/blog/health-app-churn-retention/
+18. **Function Health $365/yr, 160 tests, Ezra (May 2025), 100k+ members (2024), $298M at $2.5B (Nov 2025), +$450M (Jul 2026)** — verified. https://en.wikipedia.org/wiki/Function_Health
+19. **Superpower $349/yr, 150+ biomarkers, 17 scores; InsideTracker $149/yr, InnerAge $99, "normal does not mean optimal"** — verified on official pages; InsideTracker Ultimate test ~$589 **unverified** (no price shown). https://superpower.com/ ; https://store.insidetracker.com/products/insidetracker-membership
+20. **Forjum "TestFlight beta"** — **refuted/corrected**: the official site links live App Store and Google Play listings; US iOS v4.0.13, Premium $5.99 US. "No fake progression" and "unnecessary within a year" not found on current pages (marked unverified). https://www.forjum.com/ ; https://apps.apple.com/us/app/forjum-fitness-rpg-tracker/id6757127810
+21. **Fitscape 4.1★/73 ratings, $3.99–7.99/mo, v2026.10; Level-UP 4.0★/177, Feb 2025, manual logging** — verified. https://apps.apple.com/us/app/fitscape-fitness-rpg-quests/id1602746868 ; https://apps.apple.com/us/app/level-up-fitness/id6499099763
+22. **"MinMax Games holds a US 'MINMAX GAMES' mark for role-playing games"** — **refuted**: serial 85541143 was filed by MinMax Games, LLC (New Jersey), not the BC studio, and was abandoned in Jan 2014; it was never registered. https://tsdr.uspto.gov/statusview/sn85541143
+23. **"MINMAX" (Chen Xiaosheng) "pending since 2021"** — **corrected**: filed 29 Mar 2021, now live/registered (class 7). https://tsdr.uspto.gov/statusview/sn79322260
+24. **MiniMax Group HKEX listing (9 Jan 2026, code 0100) and Disney/Universal/WBD suit (Sep 2025)** — verified. https://en.wikipedia.org/wiki/MiniMax_Group
+25. **Min-Max Fitness (Erina, 40+, own app); Jeff Nippard 12-week Min-Max Program** — verified; caveat added that the two "MinMax Fitness" apps may belong to the same business. https://www.trainerize.me/profile/min-maxfitness ; https://jeffnippard.com/products/the-min-max-program
+26. **minmax.app owned by MinMax Inc.** — **unverified** (site returned 503).
