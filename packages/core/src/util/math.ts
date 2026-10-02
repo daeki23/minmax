@@ -26,6 +26,21 @@ export function round(x: number, digits = 0): number {
 }
 
 /**
+ * Integer with "," thousands separators, e.g. 8420 → "8,420". Written out instead of
+ * `toLocaleString` so the engine has no dependency on an Intl implementation (Hermes, Dart ports).
+ */
+export function groupThousands(n: number): string {
+  const sign = n < 0 ? "-" : "";
+  const digits = String(Math.round(Math.abs(n)));
+  let out = "";
+  for (let i = 0; i < digits.length; i++) {
+    if (i > 0 && (digits.length - i) % 3 === 0) out += ",";
+    out += digits[i];
+  }
+  return sign + out;
+}
+
+/**
  * Piecewise-linear interpolation of y at x over sorted knots.
  * Outside the knot range the nearest y is returned (no extrapolation).
  */

@@ -3,6 +3,7 @@ import type { RegionId, UiMode } from "../types/character.js";
 import { REGION_LABEL } from "../types/character.js";
 import type { StatId, StatValue } from "../types/stat.js";
 import { STAT_LABEL } from "../types/stat.js";
+import { groupThousands } from "../util/math.js";
 
 /**
  * One state machine, two renderers. These helpers produce the strings; the UI only chooses the mode.
@@ -63,7 +64,7 @@ export function levelLine(mode: UiMode, level: number, previous: number | null):
 }
 
 export function xpLine(mode: UiMode, current: number, target: number): string {
-  if (mode === "game") return `XP ${current.toLocaleString("en-US")} / ${target.toLocaleString("en-US")}`;
+  if (mode === "game") return `XP ${groupThousands(current)} / ${groupThousands(target)}`;
   return `${Math.round((100 * current) / Math.max(target, 1))} % of this chapter's plan done`;
 }
 
