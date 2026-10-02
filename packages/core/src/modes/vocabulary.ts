@@ -9,15 +9,24 @@ import { STAT_LABEL } from "../types/stat.js";
  * See docs/02-game-system.md "Modes".
  */
 
+/**
+ * Simple Mode may only say "percentile" when every input ranked against a sampled population.
+ * Criterion scores (guideline bands, dose-response curves) and mixed stats say "score" instead,
+ * because "72nd percentile" would be a false claim about other people (research/normative-data.md).
+ */
 export function statLine(mode: UiMode, s: StatValue): string {
   const name = STAT_LABEL[s.stat];
   switch (s.kind) {
     case "point":
-      return mode === "game" ? `${name} ${s.value}` : `${name}: ${ordinal(s.value)} percentile for your age`;
+      if (mode === "game") return `${name} ${s.value}`;
+      return s.basis === "population"
+        ? `${name}: ${ordinal(s.value)} percentile for your age`
+        : `${name}: score ${s.value} of 100 against health guidelines`;
     case "range":
-      return mode === "game"
-        ? `${name} ${s.low}–${s.high}`
-        : `${name}: roughly the ${ordinal(s.low)} to ${ordinal(s.high)} percentile`;
+      if (mode === "game") return `${name} ${s.low}–${s.high}`;
+      return s.basis === "population"
+        ? `${name}: roughly the ${ordinal(s.low)} to ${ordinal(s.high)} percentile`
+        : `${name}: score roughly ${s.low} to ${s.high} of 100 against health guidelines`;
     case "unmeasured":
       return mode === "game" ? `${name} —` : `${name}: not measured yet`;
   }

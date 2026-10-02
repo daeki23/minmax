@@ -101,6 +101,7 @@ describe("checkPredicate", () => {
         confidence: 0.5,
         trustLevel: 1 as const,
         normStatus: "synthetic" as const,
+        basis: "population" as const,
         contributions: [],
       },
     };

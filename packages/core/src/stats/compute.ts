@@ -1,13 +1,21 @@
 import type { MetricEstimate } from "../provenance/resolve.js";
 import type { TrustLevel, UserProfile } from "../types/measurement.js";
 import type { Metric } from "../types/metric.js";
-import type { MetricContribution, NormStatus, StatId, StatValue } from "../types/stat.js";
+import type {
+  MetricContribution,
+  NormBasis,
+  NormStatus,
+  StatBasis,
+  StatId,
+  StatValue,
+} from "../types/stat.js";
 import { STATS } from "../types/stat.js";
 import { clamp, round, weightedMean } from "../util/math.js";
+import { percentileToZ, zToPercentile } from "../util/normal.js";
 import { ENGINE_VERSION } from "../version.js";
 import { POINT_CONFIDENCE_MIN, POINT_COVERAGE_MIN, RANGE_COVERAGE_MIN, STAT_MODEL } from "./model.js";
 import type { NormRegistry } from "./norms.js";
-import { percentileFor } from "./norms.js";
+import { PERCENTILE_CEILING, PERCENTILE_FLOOR, percentileFor } from "./norms.js";
 
 export interface ComputeContext {
   readonly profile: UserProfile;
@@ -24,8 +32,25 @@ function worstNorm(statuses: readonly NormStatus[]): NormStatus {
   return worst;
 }
 
+function combinedBasis(bases: readonly NormBasis[]): StatBasis {
+  const distinct = new Set(bases);
+  if (distinct.size === 1) return bases[0] as NormBasis;
+  return "mixed";
+}
+
 /**
- * Compute one stat. The value is a coverage-weighted mean of constituent percentiles.
+ * Combine constituent percentiles as a weighted mean in z (probit) space and convert back, as the
+ * normative-data report recommends: averaging percentiles directly compresses the tails.
+ */
+export function combinePercentiles(
+  pairs: readonly (readonly [percentile: number, weight: number])[],
+): number {
+  const z = weightedMean(pairs.map(([p, w]) => [percentileToZ(clamp(p, 0.5, 99.5)), w] as const));
+  return clamp(zToPercentile(z), PERCENTILE_FLOOR, PERCENTILE_CEILING);
+}
+
+/**
+ * Compute one stat. The value is a coverage-weighted combination of constituent percentiles (in z).
  * Confidence is the weighted mean of constituent confidences, scaled by coverage.
  * Coverage < RANGE_COVERAGE_MIN → unmeasured; coverage < POINT_COVERAGE_MIN or confidence < POINT_CONFIDENCE_MIN → range.
  */
@@ -48,6 +73,7 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
         confidence: 0,
         trustLevel: null,
         normStatus: table ? table.status : null,
+        normBasis: table ? table.basis : null,
         normVersion: table ? table.version : null,
         measurementIds: est ? est.measurementIds : [],
       });
@@ -63,6 +89,7 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
         confidence: 0,
         trustLevel: est.trustLevel,
         normStatus: table.status,
+        normBasis: table.basis,
         normVersion: table.version,
         measurementIds: est.measurementIds,
       });
@@ -76,6 +103,7 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
       confidence: est.confidence,
       trustLevel: est.trustLevel,
       normStatus: table.status,
+      normBasis: table.basis,
       normVersion: table.version,
       measurementIds: est.measurementIds,
     });
@@ -98,20 +126,22 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
     };
   }
 
-  const value = weightedMean(measured.map((c) => [c.percentile, c.weight] as const));
+  const value = combinePercentiles(measured.map((c) => [c.percentile, c.weight] as const));
   const rawConfidence = weightedMean(measured.map((c) => [c.confidence, c.weight] as const));
   const confidence = clamp(rawConfidence * (0.5 + 0.5 * coverage), 0, 1);
   const trustLevel = Math.min(...measured.map((c) => c.trustLevel ?? 0)) as TrustLevel;
   const normStatus = worstNorm(measured.map((c) => c.normStatus ?? "synthetic"));
+  const basis = combinedBasis(measured.map((c) => c.normBasis ?? "criterion"));
 
   if (coverage >= POINT_COVERAGE_MIN && confidence >= POINT_CONFIDENCE_MIN) {
     return {
       stat,
       kind: "point",
-      value: round(clamp(value, 1, 99)),
+      value: round(value),
       confidence: round(confidence, 2),
       trustLevel,
       normStatus,
+      basis,
       contributions,
       computedAt: ctx.now,
       engineVersion: ENGINE_VERSION,
@@ -120,16 +150,16 @@ export function computeStat(stat: StatId, ctx: ComputeContext): StatValue {
 
   // Range width grows with missing coverage and missing confidence. Width 10 at best, up to 40.
   const width = clamp(10 + 30 * (1 - coverage) * 0.5 + 30 * (1 - confidence) * 0.5, 10, 40);
-  const mid = clamp(value, 1, 99);
   return {
     stat,
     kind: "range",
-    low: round(clamp(mid - width / 2, 1, 99)),
-    high: round(clamp(mid + width / 2, 1, 99)),
-    mid: round(mid),
+    low: round(clamp(value - width / 2, PERCENTILE_FLOOR, PERCENTILE_CEILING)),
+    high: round(clamp(value + width / 2, PERCENTILE_FLOOR, PERCENTILE_CEILING)),
+    mid: round(value),
     confidence: round(confidence, 2),
     trustLevel,
     normStatus,
+    basis,
     contributions,
     computedAt: ctx.now,
     engineVersion: ENGINE_VERSION,

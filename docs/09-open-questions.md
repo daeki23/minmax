@@ -23,7 +23,8 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 
 - **[research] Which vendor API first.** Garmin's developer program approval process and timing decide whether Garmin can be in the MVP or must come through an aggregator. Pending `research/wearable-integrations.md`.
 - **[research] Error bars per metric and vendor** for the confidence priors.
-- **[research] Mobility norms.** Where published norms are missing, how to label and how to build our own.
+- **[research] Mobility norms.** No adult population norms exist (normative-data report §4); Mobility is a criterion score for now. Whether MINMAX builds its own consented, device-verified norm cohort is open.
+- **[founder] Reference sex for non-binary users and users on hormone therapy.** Published tables are male/female only; today such users get no percentile for sex-specific metrics. Letting the user choose a reference sex per metric is the honest option; needs a decision.
 - **[founder] How hard a requirement is Midnight?** The provenance design is Midnight-ready without depending on it. If the founder wants Midnight in the first public release for strategic reasons (ecosystem grants, partnerships), that changes the roadmap.
 
 ## Business
@@ -52,3 +53,7 @@ _Status: living document · started 2026-10-02. Questions for the founder are ma
 | Can two load quests for the same stat be scheduled in one week? | No, as a hard rule; the scheduler leaves a slot empty instead | `packages/core/src/quests/schedule.ts` |
 | Where does the server see health data? | Only vendor-webhook data it ingested itself; the phone is the system of record | `05-architecture.md` |
 | Garmin in the MVP? | Only through HealthKit and Health Connect; Garmin's developer program is closed to new applicants in 2026 | `05-architecture.md`, `research/wearable-integrations.md` |
+| Which metrics are real percentiles? | Only those with sampled population tables (VO₂max, grip, chair stand, jump, SRI, lipids, RHR). Everything else is a criterion score and the UI never calls it a percentile | `packages/core/src/stats/published.ts`, `research/normative-data.md` |
+| How are percentiles interpolated and combined? | Linearly in z (probit) between anchors and across age-band midpoints; stats combine inputs as a weighted mean in z, never as a mean of percentiles | `packages/core/src/stats/norms.ts`, `compute.ts` |
+| Metrics without published norms (pull-ups, lifts, sprint, broad jump, shoulder) | No table; measured and shown, but they contribute nothing to the percentile until a table exists. Lifter crowd data would be a separate "community" scale | `packages/core/src/stats/model.ts` |
+| Can a claim exceed the published tail? | No; stat claims stop at the 95th percentile and metric claims must beat the measurement error | `packages/core/src/claims/issue.ts` |

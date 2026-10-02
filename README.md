@@ -11,7 +11,7 @@ _Working title. Early stage: concept, research and domain engine. No app yet._
 | Vision, product concept, game system, data provenance, architecture | Drafted, see `docs/00`–`03` and `docs/05` |
 | Research (market, integrations, regulation done; norms, ZK, monetization, psychology, evidence, training science, tech stack in progress) | See `docs/research/` |
 | Evidence framework, business model, compliance, roadmap | Pending research results, see `docs/04`, `06`–`08` |
-| Domain engine (`packages/core`) | Built: provenance, stats, character, quests, claims, modes; 76 tests; synthetic norm tables until the normative-data report lands |
+| Domain engine (`packages/core`) | Built: provenance, stats, character, quests, claims, modes; 98 tests; published (provisional) norm tables from the normative-data report, probit-space percentiles, criterion scores labelled as such |
 | CI | GitHub Actions: lint, typecheck, test, build on every push |
 | Mobile app, backend | Not started; client framework decision pending |
 

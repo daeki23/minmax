@@ -4,10 +4,10 @@
  *
  *   pnpm --filter @minmax/core demo
  *
- * Norm tables here are SYNTHETIC fixtures; the numbers are illustrative, the mechanics are real.
+ * Norm tables are the published (provisional) ones from stats/published.ts, so the numbers are real
+ * percentiles against named references wherever one exists.
  */
 import { fitUserMeasurements, NOW, PROFILE, USER } from "../__fixtures__/measurements.js";
-import { syntheticNorms } from "../__fixtures__/norms.js";
 import { assembleCharacter } from "../character/assemble.js";
 import { allRegionStatuses } from "../character/regions.js";
 import { checkPredicate, describePredicate } from "../claims/issue.js";
@@ -16,6 +16,7 @@ import { resolveAll } from "../provenance/resolve.js";
 import { scheduleWeek } from "../quests/schedule.js";
 import { QUEST_TEMPLATES, templateById } from "../quests/templates.js";
 import { hrvReadiness } from "../recovery/hrv.js";
+import { publishedNorms } from "../stats/published.js";
 import { REGION_LABEL, type UiMode } from "../types/character.js";
 import type { Predicate } from "../types/claim.js";
 import { METRIC_SPECS } from "../types/metric.js";
@@ -26,7 +27,7 @@ const measurements = fitUserMeasurements();
 const { character, originPending } = assembleCharacter({
   profile: PROFILE,
   measurements,
-  norms: syntheticNorms,
+  norms: publishedNorms,
   classId: "hybrid",
   classChosenAt: NOW,
   now: NOW,

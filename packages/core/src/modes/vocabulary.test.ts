@@ -10,6 +10,7 @@ const point: StatValue = {
   confidence: 0.8,
   trustLevel: 2,
   normStatus: "verified",
+  basis: "population",
   contributions: [],
   computedAt: NOW,
   engineVersion: "test",
@@ -23,6 +24,7 @@ const range: StatValue = {
   confidence: 0.5,
   trustLevel: 1,
   normStatus: "verified",
+  basis: "population",
   contributions: [],
   computedAt: NOW,
   engineVersion: "test",
@@ -42,6 +44,14 @@ describe("vocabulary", () => {
     expect(statLine("simple", point)).toBe("Aerobic: 72nd percentile for your age");
     expect(statLine("game", range)).toBe("Mobility 40–60");
     expect(statLine("simple", none)).toBe("Power: not measured yet");
+  });
+
+  it("never says 'percentile' for criterion or mixed-basis stats", () => {
+    const criterion: StatValue = { ...point, stat: "movement", value: 95, basis: "criterion" };
+    expect(statLine("simple", criterion)).toBe("Movement: score 95 of 100 against health guidelines");
+    const mixed: StatValue = { ...range, basis: "mixed" };
+    expect(statLine("simple", mixed)).not.toMatch(/percentile/);
+    expect(statLine("game", criterion)).toBe("Movement 95");
   });
 
   it("ordinals", () => {

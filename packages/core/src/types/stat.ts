@@ -25,14 +25,25 @@ export const STAT_LABEL: Readonly<Record<StatId, string>> = {
 /** Status of the normative table a number came from. Provisional tables must be visibly labelled in the UI. */
 export type NormStatus = "verified" | "provisional" | "synthetic";
 
+/**
+ * What a table's numbers rank against (research/normative-data.md):
+ * - population: a sampled reference population; the number is a real percentile.
+ * - criterion: a guideline band, threshold or dose-response curve; the number is a score, not a percentile.
+ * - community: a self-selected, self-reported crowd (lifters); shown on its own scale, never in population claims.
+ */
+export type NormBasis = "population" | "criterion" | "community";
+/** A stat built from several tables may mix bases; the UI must then avoid the word "percentile". */
+export type StatBasis = NormBasis | "mixed";
+
 export interface MetricContribution {
   readonly metric: Metric;
-  /** Percentile 0-100 of the user's estimate within their age/sex band, or null if unmeasured. */
+  /** Percentile (or criterion score) 0-100 of the user's estimate within their age/sex band, or null if unmeasured. */
   readonly percentile: number | null;
   readonly weight: number;
   readonly confidence: number;
   readonly trustLevel: TrustLevel | null;
   readonly normStatus: NormStatus | null;
+  readonly normBasis: NormBasis | null;
   /** Version of the norm table used, so the percentile can be reproduced. */
   readonly normVersion: string | null;
   readonly measurementIds: readonly string[];
@@ -50,6 +61,7 @@ export type StatValue =
       readonly confidence: number;
       readonly trustLevel: TrustLevel;
       readonly normStatus: NormStatus;
+      readonly basis: StatBasis;
       readonly contributions: readonly MetricContribution[];
       readonly computedAt: string;
       readonly engineVersion: string;
@@ -63,6 +75,7 @@ export type StatValue =
       readonly confidence: number;
       readonly trustLevel: TrustLevel;
       readonly normStatus: NormStatus;
+      readonly basis: StatBasis;
       readonly contributions: readonly MetricContribution[];
       readonly computedAt: string;
       readonly engineVersion: string;

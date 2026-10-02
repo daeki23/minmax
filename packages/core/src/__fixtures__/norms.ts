@@ -1,61 +1,46 @@
-import type { AnyNormTable, NormTable } from "../stats/norms.js";
+import type { AnyNormTable, NormTable, PercentileAnchor } from "../stats/norms.js";
 import { StaticNormRegistry } from "../stats/norms.js";
 import type { Metric } from "../types/metric.js";
 
 /**
  * SYNTHETIC norm tables for tests only. Numbers are plausible but invented; status "synthetic" so the
- * engine would label any stat built on them. Real tables come from docs/research/normative-data.md.
+ * engine would label any stat built on them. Real tables live in stats/published.ts.
  */
+function normalAnchors(p50: number, spread: number, sign: 1 | -1): readonly PercentileAnchor[] {
+  const k = (m: number) => p50 + sign * m * spread;
+  return [
+    [5, k(-1.645)],
+    [10, k(-1.282)],
+    [25, k(-0.674)],
+    [50, k(0)],
+    [75, k(0.674)],
+    [90, k(1.282)],
+    [95, k(1.645)],
+  ];
+}
+
 function higherTable(metric: Metric, p50: number, spread: number): NormTable {
-  const k = (m: number) => p50 + m * spread;
   return {
     metric,
     sex: "pooled",
     status: "synthetic",
+    basis: "population",
     source: "synthetic fixture",
     version: "test",
-    bands: [
-      {
-        minAge: 18,
-        maxAge: 99,
-        knots: {
-          p5: k(-1.65),
-          p10: k(-1.28),
-          p25: k(-0.67),
-          p50: k(0),
-          p75: k(0.67),
-          p90: k(1.28),
-          p95: k(1.65),
-        },
-      },
-    ],
+    bands: [{ minAge: 18, maxAge: 99, anchors: normalAnchors(p50, spread, 1) }],
   };
 }
 
-/** For lower-is-better metrics the knots are still "value at percentile": p5 is the worst (highest) value. */
+/** For lower-is-better metrics the anchors are still "value at percentile": p5 is the worst (highest) value. */
 function lowerTable(metric: Metric, p50: number, spread: number): NormTable {
-  const k = (m: number) => p50 - m * spread;
   return {
     metric,
     sex: "pooled",
     status: "synthetic",
+    basis: "population",
     source: "synthetic fixture",
     version: "test",
-    bands: [
-      {
-        minAge: 18,
-        maxAge: 99,
-        knots: {
-          p5: k(-1.65),
-          p10: k(-1.28),
-          p25: k(-0.67),
-          p50: k(0),
-          p75: k(0.67),
-          p90: k(1.28),
-          p95: k(1.65),
-        },
-      },
-    ],
+    bands: [{ minAge: 18, maxAge: 99, anchors: normalAnchors(p50, spread, -1) }],
   };
 }
 
@@ -90,6 +75,7 @@ export const SYNTHETIC_TABLES: readonly AnyNormTable[] = [
     metric: "sleep_duration_h",
     sex: "pooled",
     status: "synthetic",
+    basis: "criterion",
     source: "synthetic fixture",
     version: "test",
     bands: [
@@ -116,6 +102,7 @@ export const SYNTHETIC_TABLES: readonly AnyNormTable[] = [
     metric: "protein_g_per_kg_day",
     sex: "pooled",
     status: "synthetic",
+    basis: "criterion",
     source: "synthetic fixture",
     version: "test",
     bands: [
@@ -140,6 +127,7 @@ export const SYNTHETIC_TABLES: readonly AnyNormTable[] = [
     metric: "body_fat_pct",
     sex: "pooled",
     status: "synthetic",
+    basis: "criterion",
     source: "synthetic fixture",
     version: "test",
     bands: [

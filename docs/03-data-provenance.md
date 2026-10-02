@@ -76,7 +76,7 @@ Garmin says VO₂max 52, Apple Health says 48, the user ran a Cooper test that i
 
 ## Confidence into stats
 
-A stat's displayed value is the percentile of its best estimate. Its confidence is the minimum of its constituent confidences weighted by contribution. Below a confidence floor the stat renders as a **range** ("Aerobic 60–72") instead of a point, and below a second floor as **unmeasured**. The character sheet is allowed to be honest about not knowing. **[decision]**
+A stat's displayed value is the percentile of its best estimate, combined across inputs as a weighted mean of z-scores. Each norm table declares its **basis**: a sampled population (a real percentile), a criterion (guideline band or dose-response curve, a score) or a community (self-reported crowd, a separate scale). A stat that mixes bases is never called a percentile in Simple Mode. Its confidence is the minimum of its constituent confidences weighted by contribution. Below a confidence floor the stat renders as a **range** ("Aerobic 60–72") instead of a point, and below a second floor as **unmeasured**. The character sheet is allowed to be honest about not knowing. **[decision]**
 
 ## Claims
 

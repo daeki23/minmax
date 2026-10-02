@@ -16,6 +16,7 @@ function point(stat: StatId, value: number, confidence = 0.8): StatValue {
     confidence,
     trustLevel: 2,
     normStatus: "synthetic",
+    basis: "population",
     contributions: [],
     computedAt: NOW,
     engineVersion: "test",
