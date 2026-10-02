@@ -1,0 +1,14 @@
+{
+  "name": "minmax",
+  "private": true,
+  "version": "0.0.1",
+  "description": "MINMAX monorepo: your body, as a character sheet",
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint"
+  }
+}
